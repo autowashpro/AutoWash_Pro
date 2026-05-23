@@ -1,0 +1,29 @@
+﻿# IDE
+.idea/
+.vscode/
+*.iml
+
+# Build outputs
+target/
+build/
+dist/
+.next/
+out/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
