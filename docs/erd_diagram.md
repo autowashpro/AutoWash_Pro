@@ -29,7 +29,7 @@ graph LR
   end
   subgraph OPS["⚙️ Operations"]
     Vehicle
-    Branch
+    StoreInfo
     VehicleInspection
     InspectionImage
     Payment
@@ -70,11 +70,8 @@ erDiagram
     VARCHAR phone
     VARCHAR password_hash
     ENUM role
-    UUID branch_id FK
     ENUM status
     BOOLEAN email_verified
-    VARCHAR claim_token
-    TIMESTAMP claim_token_expires_at
     TIMESTAMP created_at
     TIMESTAMP updated_at
   }
@@ -94,15 +91,14 @@ erDiagram
     INT birth_month
   }
 
-  Branch {
-    UUID branch_id PK
+  StoreInfo {
+    UUID store_id PK
     VARCHAR name
     TEXT address
     VARCHAR phone
     TIME opening_time
     TIME closing_time
-    ENUM status
-    TIMESTAMP created_at
+    TIMESTAMP updated_at
   }
 
   Vehicle {
@@ -147,7 +143,6 @@ erDiagram
 
   SlotTemplate {
     UUID template_id PK
-    UUID branch_id FK
     INT day_of_week
     TIME start_time
     TIME end_time
@@ -157,7 +152,7 @@ erDiagram
 
   SlotInstance {
     UUID slot_id PK
-    UUID branch_id FK
+    UUID template_id FK
     DATE date
     TIME start_time
     TIME end_time
@@ -174,11 +169,10 @@ erDiagram
     UUID booking_id PK
     UUID customer_id FK
     UUID vehicle_id FK
-    UUID branch_id FK
     ENUM booking_type
+    ENUM booking_source
     UUID start_slot_id FK
     INT num_slots
-    ENUM booking_source
     ENUM status
     VARCHAR voucher_code FK
     BIGINT discount_amount
@@ -358,24 +352,31 @@ erDiagram
     VARCHAR action
     VARCHAR entity_type
     UUID entity_id
-    JSONB old_value
-    JSONB new_value
+    NVARCHAR_MAX old_value
+    NVARCHAR_MAX new_value
     VARCHAR ip_address
     TIMESTAMP created_at
   }
 
+  Notification {
+    UUID notification_id PK
+    UUID user_id FK
+    VARCHAR type
+    VARCHAR title
+    TEXT body
+    BOOLEAN is_read
+    UUID booking_id FK
+    TIMESTAMP created_at
+  }
+
   User ||--o| CustomerProfile : "has profile"
-  User }o--|| Branch : "assigned to"
   CustomerProfile ||--o{ Vehicle : "owns"
   ServiceCategory ||--o{ Service : "groups"
   Service ||--o{ ServicePrice : "priced by size"
   RewardCatalog }o--o| Service : "linked service"
-  Branch ||--o{ SlotTemplate : "defines schedule"
-  Branch ||--o{ SlotInstance : "has daily slots"
   SlotTemplate ||--o{ SlotInstance : "generates"
   CustomerProfile ||--o{ Booking : "makes"
   Vehicle ||--o{ Booking : "used in"
-  Branch ||--o{ Booking : "receives"
   SlotInstance ||--o{ Booking : "start slot of"
   Booking ||--o{ BookingService : "contains"
   Service ||--o{ BookingService : "included in"
@@ -398,6 +399,8 @@ erDiagram
   Booking ||--o| BookingRating : "rated once"
   CustomerProfile ||--o{ BookingRating : "rates"
   User ||--o{ AuditLog : "generates"
+  User ||--o{ Notification : "receives"
+  Booking }o--o| Notification : "linked to"
 ```
 
 ---
@@ -407,7 +410,6 @@ erDiagram
 | Entity | Quan hệ với | Cardinality | Ghi chú |
 |---|---|---|---|
 | **User** | CustomerProfile | 1 → 0..1 | Chỉ role CUSTOMER có CustomerProfile |
-| **User** | Branch | N → 1 | MANAGER / CAR_WASHER gán vào 1 chi nhánh |
 | **User** | BookingAssignment | 1 → N | Washer nhận nhiều task |
 | **User** | VehicleInspection | 1 → N | Car Washer thực hiện inspection |
 | **User** | AuditLog | 1 → N | Mọi actor ghi audit |
@@ -418,9 +420,6 @@ erDiagram
 | **CustomerProfile** | TrustScoreLog | 1 → N | Lịch sử trust score |
 | **CustomerProfile** | Complaint | 1 → N | Khách gửi nhiều khiếu nại |
 | **CustomerProfile** | BookingRating | 1 → N | Khách đánh giá nhiều booking |
-| **Branch** | SlotTemplate | 1 → N | Mỗi chi nhánh có cấu hình slot riêng |
-| **Branch** | SlotInstance | 1 → N | Slot thực tế theo ngày |
-| **Branch** | Booking | 1 → N | Booking thuộc 1 chi nhánh |
 | **ServiceCategory** | Service | 1 → N | Nhóm chứa nhiều dịch vụ |
 | **Service** | ServicePrice | 1 → N | 3 mức giá (S/M/L) per service |
 | **Service** | BookingService | 1 → N | Dịch vụ xuất hiện trong nhiều booking |
@@ -458,7 +457,7 @@ erDiagram
 | C-10 | CHECK | `BookingRating.*_score BETWEEN 1 AND 5` | Rating 1-5 |
 | C-11 | NOT NULL | `InspectionImage.inspection_id` | Phải có ít nhất 1 ảnh per inspection |
 | C-12 | IMMUTABLE | `LoyaltyTransaction`, `TrustScoreLog`, `AuditLog`, `BookingRating` | Không UPDATE/DELETE |
-| C-13 | NULLABLE FK | `Booking.customer_id` | Guest booking (Shadow Account) |
+| C-13 | NOT NULL | `Booking.customer_id` | Mỗi booking phải có customer |
 | C-14 | CHECK | `Booking.booking_type IN ('WASH','FLEX')` | Auto-set từ is_wash_group |
 
 ---
@@ -468,9 +467,10 @@ erDiagram
 | Entity.Field | Values |
 |---|---|
 | `User.role` | `CUSTOMER`, `MANAGER`, `CAR_WASHER`, `ADMIN` |
-| `User.status` | `SHADOW`, `ACTIVE`, `INACTIVE`, `BANNED` |
+| `User.status` | `ACTIVE`, `INACTIVE`, `BANNED` |
 | `CustomerProfile.membership_tier` | `MEMBER`, `SILVER`, `GOLD`, `PLATINUM` |
 | `Vehicle.vehicle_size` | `SMALL`, `MEDIUM`, `LARGE` |
+| `Vehicle.status` | `ACTIVE`, `INACTIVE` |
 | `Service.status` | `ACTIVE`, `INACTIVE` |
 | `SlotInstance.status` | `AVAILABLE`, `FULLY_BOOKED`, `BLOCKED` |
 | `Booking.booking_type` | `WASH`, `FLEX` |
@@ -485,3 +485,4 @@ erDiagram
 | `RewardCatalog.reward_type` | `DISCOUNT_VOUCHER`, `FREE_WASH`, `ADD_ON_SERVICE` |
 | `CustomerReward.status` | `ACTIVE`, `USED`, `EXPIRED` |
 | `Complaint.status` | `OPEN`, `IN_REVIEW`, `WAITING_FOR_CUSTOMER`, `RESOLVED`, `REJECTED`, `CLOSED` |
+| `Notification.type` | `BOOKING_CONFIRMED`, `BOOKING_CANCELLED`, `AUTO_CANCELLED`, `NO_SHOW`, `TASK_ASSIGNED`, `COMPLAINT_UPDATE`, `TIER_UPGRADE`, `WELCOME` |

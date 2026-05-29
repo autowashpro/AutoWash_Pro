@@ -10,9 +10,9 @@
 
 # 1. Executive Summary
 
-AutoWash Pro là nền tảng quản lý rửa xe ô tô thông minh, tích hợp đặt lịch trực tuyến, quy trình tiếp nhận - kiểm tra xe chuyên nghiệp, chương trình khách hàng thân thiết đa hạng và cơ chế chống spam booking.
+AutoWash Pro là nền tảng quản lý rửa xe ô tô thông minh cho một cửa hàng duy nhất, tích hợp đặt lịch trực tuyến, quy trình tiếp nhận - kiểm tra xe chuyên nghiệp, chương trình khách hàng thân thiết đa hạng và cơ chế chống spam booking.
 
-Hệ thống phục vụ 4 actor chính: **Customer** (đặt lịch, tích điểm, khiếu nại), **Manager** (quản lý vận hành, xác nhận, tạo booking vãng lai), **Car Washer** (tiếp nhận xe, thực hiện dịch vụ), **Admin** (cấu hình hệ thống, báo cáo).
+Hệ thống phục vụ 4 actor chính: **Customer** (đặt lịch, tích điểm, khiếu nại), **Manager** (quản lý vận hành, xác nhận, tạo booking tại chỗ), **Car Washer** (tiếp nhận xe, thực hiện dịch vụ), **Admin** (cấu hình hệ thống, báo cáo).
 
 Điểm khác biệt cốt lõi so với phần mềm quản lý rửa xe thông thường:
 - **Loyalty Program 4 hạng** (Member / Silver / Gold / Platinum) với đặc quyền booking window ưu tiên, perks vận hành và kho quà đổi thưởng 3 nhóm.
@@ -31,7 +31,7 @@ Hệ thống phục vụ 4 actor chính: **Customer** (đặt lịch, tích đi�
 3. Xây dựng quy trình tiếp nhận xe chuyên nghiệp có kiểm tra tình trạng xe trước/sau dịch vụ để giảm tranh chấp.
 4. Hỗ trợ thanh toán sau dịch vụ an toàn kết hợp Cash và PayOS, có cơ chế kiểm soát rủi ro.
 5. Tăng tỷ lệ khách quay lại qua chương trình loyalty 4 hạng với đặc quyền thực tế (booking window, VIP lounge, senior technician).
-6. Hỗ trợ vận hành linh hoạt: Manager tạo booking hộ khách vãng lai, phân công Car Washer.
+6. Hỗ trợ vận hành linh hoạt: Manager tạo booking tại chỗ (Walk-in) sau khi tạo tài khoản cho khách, phân công Car Washer.
 7. Cung cấp báo cáo doanh thu, hiệu suất nhân viên và chất lượng dịch vụ cho ban quản lý.
 
 ## 2.2 Mục tiêu hệ thống
@@ -62,8 +62,8 @@ Hệ thống phục vụ 4 actor chính: **Customer** (đặt lịch, tích đi�
 | 3 | Quản lý thông tin cá nhân |
 | 4 | Tạo / Xem / Sửa / Xóa xe cá nhân (nhiều xe) |
 | 5 | Xem danh mục dịch vụ và bảng giá theo loại xe |
-| 6 | Xem slot trống theo chi nhánh và ngày |
-| 7 | Chọn xe, dịch vụ (tự do nhiều dịch vụ), chi nhánh, slot |
+| 6 | Xem slot trống theo ngày |
+| 7 | Chọn xe, dịch vụ (tự do nhiều dịch vụ), slot |
 | 8 | Xác nhận booking trong thời gian giữ slot (**10 phút**) |
 | 9 | Theo dõi trạng thái booking real-time |
 | 10 | Xác nhận tình trạng xe trước khi bắt đầu dịch vụ |
@@ -80,10 +80,10 @@ Hệ thống phục vụ 4 actor chính: **Customer** (đặt lịch, tích đi�
 
 | # | Chức năng |
 |---|---|
-| 1 | Xem dashboard booking theo ngày / chi nhánh / trạng thái |
+| 1 | Xem dashboard booking theo ngày / trạng thái |
 | 2 | Xác nhận booking khi cần (các trường hợp đặc biệt) |
 | 3 | Gọi điện xác nhận booking rủi ro cao |
-| 4 | Tạo booking hộ khách vãng lai |
+| 4 | Tạo booking tại chỗ (Walk-in) sau khi tạo tài khoản cho khách |
 | 5 | Phân công Car Washer cho booking |
 | 6 | Hủy hoặc điều chỉnh booking khi cần vận hành |
 | 7 | Xử lý khách đến trễ / đánh dấu NO_SHOW |
@@ -110,7 +110,7 @@ Hệ thống phục vụ 4 actor chính: **Customer** (đặt lịch, tích đi�
 | # | Chức năng |
 |---|---|
 | 1 | Quản lý user và role |
-| 2 | Quản lý chi nhánh |
+| 2 | Quản lý thông tin cửa hàng (StoreInfo) |
 | 3 | Quản lý danh mục và bảng giá dịch vụ |
 | 4 | Cấu hình slot (số cầu nâng, số washers tối thiểu/xe) |
 | 5 | Cấu hình loyalty rules (conversion rate, tier threshold, multiplier, expiry) |
@@ -144,25 +144,22 @@ Hệ thống phục vụ 4 actor chính: **Customer** (đặt lịch, tích đi�
 | Customer | Đặt lịch nhanh, giá rõ ràng, nhận xe đúng chất lượng, tích điểm quyền lợi thực tế |
 | Manager | Quản lý vận hành hàng ngày, phân công nhân viên, xử lý ngoại lệ |
 | Car Washer | Biết rõ task, quy trình tiếp nhận xe, cập nhật tiến độ dễ dàng |
-| Admin | Cấu hình hệ thống, quản lý dữ liệu nền, xem báo cáo toàn hệ thống |
+| Admin | Cấu hình hệ thống, quản lý dữ liệu nền, xem báo cáo |
 | Business Owner | Tăng doanh thu, giữ chân khách hàng, giảm tranh chấp, kiểm soát chất lượng |
 
 ## 4.2 System Actors
 
-### 4.2.1 Guest
-Người chưa đăng nhập. Có thể xem danh mục dịch vụ, bảng giá và slot trống công khai. Có thể đặt lịch lần đầu qua **CTA Phone Number Flow** (nhập SĐT → xác thực OTP) mà không cần tạo tài khoản thủ công — hệ thống tự động tạo **Shadow Account** ngầm. Nếu là khách vãng lai đến trực tiếp tại cửa hàng, Manager tạo booking hộ và cũng sử dụng cùng cơ chế Shadow Account.
+### 4.2.1 Customer
+Khách hàng có tài khoản đã xác thực OTP. Có thể quản lý xe, đặt lịch, xác nhận tình trạng xe, thanh toán, tích điểm, đổi quà, gửi khiếu nại. **Bắt buộc đăng nhập trước khi đặt lịch.**
 
-### 4.2.2 Customer
-Khách hàng có tài khoản đã xác thực OTP. Có thể quản lý xe, đặt lịch, xác nhận tình trạng xe, thanh toán, tích điểm, đổi quà, gửi khiếu nại.
+### 4.2.2 Manager
+Người quản lý vận hành tại cửa hàng. Quản lý booking, phân công Car Washer, tạo booking tại chỗ (Walk-in) sau khi tạo tài khoản cho khách, xử lý ngoại lệ và khiếu nại.
 
-### 4.2.3 Manager
-Người quản lý vận hành tại chi nhánh. Chỉ thấy data của chi nhánh được gán. Quản lý booking, phân công Car Washer, xử lý ngoại lệ và khiếu nại.
-
-### 4.2.4 Car Washer
+### 4.2.3 Car Washer
 Nhân viên trực tiếp tiếp nhận và thực hiện dịch vụ. Xem task được phân công, thực hiện check-in, inspection, cập nhật trạng thái.
 
-### 4.2.5 Admin
-Quản trị viên hệ thống. Quản lý cấu hình toàn bộ: dịch vụ, chi nhánh, user, loyalty rules, trust score threshold, báo cáo.
+### 4.2.4 Admin
+Quản trị viên hệ thống. Quản lý cấu hình toàn bộ: dịch vụ, thông tin cửa hàng, user, loyalty rules, trust score threshold, báo cáo.
 
 ---
 
@@ -178,27 +175,20 @@ Quản trị viên hệ thống. Quản lý cấu hình toàn bộ: dịch vụ,
 8. Một biển số xe chỉ được có tối đa 1 booking "active" trên toàn hệ thống tại cùng thời điểm.
 9. Mỗi tài khoản tối đa 2 booking ở trạng thái "Chờ phục vụ" cùng lúc.
 10. Hệ thống gửi email nhắc xác nhận theo 2 ngưỡng: (A) Slot từ 10:00 trở đi → gửi tại T-2h, phản hồi trong 30 phút → không phản hồi → AUTO_CANCEL. (B) Slot trước 10:00 → gửi lúc 20:00 hôm trước, phản hồi trước T-1h sáng hôm hẹn → không phản hồi → AUTO_CANCEL.
-11. Manager tạo booking hộ khách vãng lai (nhập tối thiểu: tên, SĐT, biển số, dịch vụ, slot). Email của khách là tùy chọn nhưng nếu có thì Claim Account link mới hoạt động được.
-12. Điểm tích lũy chỉ được cộng sau khi Payment status = PAID.
-13. Tier thành viên tính theo tổng chi tiêu hợp lệ trong 12 tháng gần nhất.
-14. Khi đủ ngưỡng tier → thăng hạng ngay lập tức → giữ hạng đúng 12 tháng → review sau 30 ngày ân hạn.
-15. Trust Score bắt đầu từ 100 điểm cho tài khoản mới; recovery +5/booking thành công.
-16. Trust Score < 60: mất Pay After Service, phải thanh toán bằng PayOS trước khi nhận xe.
-17. Trust Score < 20: khóa đặt lịch, cần Manager review và unlock.
-18. Platinum được miễn phạt trust score tối đa 2 lần NO_SHOW/CANCEL sát giờ mỗi tháng.
-19. Manager chỉ thấy và quản lý data thuộc chi nhánh được gán.
-20. **Shadow Account** là tài khoản tự động tạo bởi hệ thống (không có mật khẩu) khi khách đặt lịch lần đầu không qua đăng ký thủ công, hoặc khi Manager tạo booking hộ khách vãng lai. Shadow Account có đầy đủ Trust Score, loyalty tracking và lịch sử booking.
-21. Khi khách có Shadow Account nhập SĐT vào CTA, hệ thống nhận diện và **gộp booking mới vào Shadow Account cũ** (không tạo thêm tài khoản mới), đảm bảo điểm tích lũy và Trust Score liên tục.
-22. Khi khách nhập SĐT vào CTA mà SĐT đó đã có tài khoản **ACTIVE** → hệ thống **bắt buộc yêu cầu đăng nhập** trước khi đặt lịch. Không cho phép đặt ẩn danh để tránh rủi ro mạo danh biển số và sai lệch Trust Score.
-23. Shadow Account được kích hoạt thành **ACTIVE** bằng cách đặt mật khẩu qua link được gửi trong email sau khi thanh toán thành công (**Claim Account Flow**). Toàn bộ điểm, lịch sử và Trust Score được giữ nguyên.
-24. Trong luồng Guest, CTA chỉ hỏi SĐT. **Email được thu thập bắt buộc tại trang "Thông tin liên hệ"**, sau khi khách đã chọn kích thước xe, chi nhánh, dịch vụ và slot. Email dùng để gửi OTP, xác nhận lịch, hóa đơn và link Claim Account.
-25. **Slot đơn vị = 30 phút.** Hệ thống áp dụng **2 loại booking** dựa trên dịch vụ được chọn:
+11. Customer phải đăng nhập trước khi đặt lịch. Không hỗ trợ đặt lịch ẩn danh (Guest).
+12. Walk-in: Manager tạo tài khoản mới cho khách (nếu chưa có) hoặc tìm tài khoản hiện tại bằng SĐT, sau đó tạo booking.
+13. Điểm tích lũy chỉ được cộng sau khi Payment status = PAID.
+14. Tier thành viên tính theo tổng chi tiêu hợp lệ trong 12 tháng gần nhất.
+15. Khi đủ ngưỡng tier → thăng hạng ngay lập tức → giữ hạng đúng 12 tháng → review sau 30 ngày ân hạn.
+16. Trust Score bắt đầu từ 100 điểm cho tài khoản mới; recovery +5/booking thành công.
+17. Trust Score < 60: mất Pay After Service, phải thanh toán bằng PayOS trước khi nhận xe.
+18. Trust Score < 20: khóa đặt lịch, cần Manager review và unlock.
+19. Platinum được miễn phạt trust score tối đa 2 lần NO_SHOW/CANCEL trong cửa sổ < 2h mỗi tháng.
+20. **Slot đơn vị = 30 phút.** Hệ thống áp dụng **2 loại booking** dựa trên dịch vụ được chọn:
     - **WASH booking (Type A):** Booking có ít nhất 1 dịch vụ thuộc nhóm **"Rửa xe & Combo"**. Chiếm cầu nâng. Hệ thống tính `num_slots = ceil(total_duration / 30)` và chặn các slot liên tiếp tương ứng.
     - **FLEX booking (Type B):** Booking chỉ gồm dịch vụ nhóm 2–5 (vệ sinh, xử lý bề mặt, bảo vệ...). Không chiếm cầu nâng. Khách chọn **bất kỳ slot nào từ 7:00 – 17:30** mà không bị giới hạn capacity. Manager lên kế hoạch nhân sự thủ công.
-26. **FLEX dịch vụ thời gian dài (Coating, PPF, Detailing):** Dịch vụ có `estimated_duration_minutes` > 480 phút (nhiều giờ hoặc nhiều ngày) vẫn đặt slot bình thường theo luồng FLEX. Slot chọn là **giờ hẹn tư vấn**, không phải giờ hoàn thành. Khách hiểu và chấp nhận tính chất dài hạn của dịch vụ. Manager lên lịch thi công chi tiết sau khi tư vấn tại chỗ.
-27. **Cross-branch loyalty:** Điểm tích lũy và đổi thưởng (voucher, quà) áp dụng toàn hệ thống, không giới hạn chi nhánh. Quản lý điểm tập trung tại `CustomerProfile`.
-28. **Bảng giá dịch vụ thống nhất toàn hệ thống — OUT OF SCOPE v1.0:** `ServicePrice` không có `branch_id`. Tất cả chi nhánh dùng chung bảng giá. Giá theo chi nhánh là tính năng nâng cấp trong phiên bản sau.
-29. **Mỗi chi nhánh có slot template, cầu nâng, số washer, và khung giờ hoạt động riêng** (cấu hình qua SlotTemplate + SlotInstance). Manager chi nhánh nhìn thấy danh sách booking sắp tới để chuẩn bị nhân sự và thiết bị phù hợp qua FR-RPT-01 (dashboard booking theo ngày/chi nhánh).
+21. **FLEX dịch vụ thời gian dài (Coating, PPF, Detailing):** Dịch vụ có `estimated_duration_minutes` > 480 phút (nhiều giờ hoặc nhiều ngày) vẫn đặt slot bình thường theo luồng FLEX. Slot chọn là **giờ hẹn tư vấn**, không phải giờ hoàn thành. Khách hiểu và chấp nhận tính chất dài hạn của dịch vụ. Manager lên lịch thi công chi tiết sau khi tư vấn tại chỗ.
+22. **Tiệm có slot template, cầu nâng, số washer, và khung giờ hoạt động** (cấu hình qua SlotTemplate + SlotInstance). Manager nhìn thấy danh sách booking sắp tới để chuẩn bị nhân sự và thiết bị phù hợp qua FR-RPT-01 (dashboard booking theo ngày).
 
 ---
 
@@ -224,9 +214,9 @@ Quản trị viên hệ thống. Quản lý cấu hình toàn bộ: dịch vụ,
 
 | Mã | Tên dịch vụ | S | M | L | Thời gian |
 |---|---|---|---|---|---|
-| SVC-W-01 | VW Basic Wash | 170k | 180k | 190k | 20 phút |
-| SVC-W-02 | VW Detail Wash | 270k | 280k | 290k | 20 phút |
-| SVC-W-03 | VW Ultimate Wash | 590k | 640k | 690k | 40 phút |
+| SVC-W-01 | AW Basic Wash | 170k | 180k | 190k | 20 phút |
+| SVC-W-02 | AW Detail Wash | 270k | 280k | 290k | 20 phút |
+| SVC-W-03 | AW Ultimate Wash | 590k | 640k | 690k | 40 phút |
 | SVC-W-04 | Rửa xe ngoài | 80k | 90k | 100k | 20 phút |
 | SVC-W-05 | Rửa gầm | 40k | 50k | 60k | 20 phút |
 
@@ -362,7 +352,7 @@ Chi tiêu đạt ngưỡng tier mới
 | Senior Technician | Xe được đích thân **Tổ trưởng kỹ thuật** thi công và kiểm định (QC) trước bàn giao |
 | Pick-up / Drop-off | Hỗ trợ đón/giao xe tận nhà trong bán kính **3km**, miễn phí hoặc phí ưu đãi |
 | Ưu tiên khiếu nại | Xử lý khiếu nại trong **24 giờ** (SLA nhanh gấp 3 lần so với hạng khác) |
-| Hotline VIP | Đường dây riêng, nối thẳng Manager chi nhánh (không qua tổng đài) |
+| Hotline VIP | Đường dây riêng, nối thẳng Manager (không qua tổng đài) |
 | Thông báo sớm nhất | Ưu tiên nhận thông tin dịch vụ mới & gói ưu đãi đặc biệt trước mọi hạng |
 
 ## 7.4 Công thức Tích điểm
@@ -426,8 +416,7 @@ Final_Points = floor(Base_Points × Tier_Multiplier)
 
 ## Lớp 1: Xác thực Danh tính (Identity Verification)
 
-- **OTP bắt buộc cho Guest:** Sau khi nhập thông tin liên hệ (tên, email, biển số), hệ thống gửi OTP qua **Email** để xác thực danh tính.
-- **OTP cho tài khoản ACTIVE:** Xác thực OTP qua **Email** khi đăng ký. Số điện thoại và email gắn với account ID vĩnh viễn.
+- **OTP khi đăng ký:** Xác thực OTP qua **Email** khi đăng ký tài khoản. Số điện thoại và email gắn với account ID vĩnh viễn.
 - **Biển số xe ràng buộc:** Hệ thống bắt buộc nhập biển số hợp lệ. **Một biển số xe tại một thời điểm chỉ được có tối đa 1 booking active** trên toàn hệ thống.
 
 ## Lớp 2: Giới hạn Đặt lịch (Rate Limiting & Booking Cap)
@@ -458,15 +447,17 @@ Nếu không phản hồi sau 30 phút:
 
 ## Lớp 4: Trust Score — Điểm Uy tín
 
-| Sự kiện | Thay đổi Trust Score |
-|---|---|
-| Tài khoản mới tạo | Bắt đầu: **100 điểm** |
-| Hoàn thành booking thành công | **+5 điểm** (tối đa 100) |
-| NO_SHOW (không đến) | **−40 điểm** |
-| AUTO_CANCELLED (không confirm T-2h) | **−20 điểm** |
-| CANCEL sát giờ (< 30 phút trước) | **−20 điểm** |
-| CANCEL sớm (≥ 2 giờ trước) | **0 điểm** (không phạt) |
-| Platinum miễn phạt | Tối đa **2 lần/tháng** không bị trừ điểm |
+| Sự kiện | Thay đổi Trust Score | Ghi chú |
+|---|---|---|
+| Tài khoản mới tạo | Bắt đầu: **100 điểm** | |
+| Hoàn thành booking thành công | **+5 điểm** (tối đa 100) | |
+| NO_SHOW (không đến) | **−40 điểm** | Manager đánh dấu sau 10 phút trễ |
+| AUTO_CANCELLED (không confirm T-2h) | **−20 điểm** | Hệ thống tự động sau deadline |
+| CANCEL trong cửa sổ < 2h (qua T-2h email link) | **−20 điểm** | Khách click HỦY sau khi nhận email nhắc lịch |
+| CANCEL sớm (≥ 2 giờ trước, trước khi email T-2h gửi) | **0 điểm** (không phạt) | Khách tự hủy từ app C-12 khi còn nhiều thời gian |
+| Platinum miễn phạt | Tối đa **2 lần/tháng** không bị trừ điểm | Áp dụng cho NO_SHOW và CANCEL trong cửa sổ < 2h |
+
+> **Lưu ý thiết kế:** Case "CANCEL sát giờ < 30 phút" được gộp vào "CANCEL trong cửa sổ < 2h" vì cùng penalty và không tồn tại path độc lập. Cơ chế AUTO_CANCEL T-2h đảm bảo rằng khi đến cửa sổ < 30 phút, booking đã bị hủy tự động hoặc nút hủy đã bị khóa (sau khi khách confirm).
 
 **Ngưỡng kích hoạt chế tài:**
 
@@ -482,7 +473,7 @@ Nếu không phản hồi sau 30 phút:
 
 ## 9.1 Slot Unit & Capacity Formula
 
-**Mỗi slot = 30 phút** (7:00, 7:30, 8:00 … 17:30). Hệ thống tạo SlotInstance tương ứng theo template của từng chi nhánh.
+**Mỗi slot = 30 phút** (7:00, 7:30, 8:00 … 17:30). Hệ thống tạo SlotInstance tương ứng theo template.
 
 ```
 Slot_Capacity = min(
@@ -492,7 +483,7 @@ Slot_Capacity = min(
 ```
 
 **Trong đó:**
-- `Active_Bays`: Số cầu nâng / bốt rửa đang hoạt động tại chi nhánh trong ca đó (Admin/Manager cấu hình).
+- `Active_Bays`: Số cầu nâng / bốt rửa đang hoạt động trong ca đó (Admin/Manager cấu hình).
 - `Car_Washers_Online`: Số Car Washer được lên lịch làm việc trong ca đó.
 - `Min_Washers_Per_Car`: Số Car Washer tối thiểu cần thiết để phục vụ 1 xe cùng lúc (mặc định = 1, Admin cấu hình).
 
@@ -535,85 +526,30 @@ num_slots      = ceil(total_duration / 30)
 
 ```
 ═══════════════════════════════════════════════════
-BƯỚC 0 — Trang đặt lịch (CTA Phone Number)
+LUỒNG ĐẶT LỊCH ONLINE — Yêu cầu đăng nhập
 ═══════════════════════════════════════════════════
-→ Khách nhập SĐT vào ô CTA chính ("Đặt lịch ngay")
-→ Hệ thống kiểm tra SĐT trong Database:
+BƯỚC 1 — Đăng nhập
+→ Customer đăng nhập vào hệ thống (email + mật khẩu)
+→ Nếu chưa có tài khoản → Đăng ký mới (OTP qua Email)
 
-   ┌── Case A: SĐT chưa tồn tại
-   │   → Hệ thống tạo Shadow Account mới (status=SHADOW, không có mật khẩu)
-   │   → Tiếp tục → Luồng Guest (xem bên dưới)
-   │
-   ├── Case B: SĐT đã là Shadow Account
-   │   → Hệ thống nhận diện, gộp booking vào Shadow Account cũ
-   │   → Tiếp tục → Luồng Guest (xem bên dưới)
-   │
-   └── Case C: SĐT đã có tài khoản ACTIVE
-       → Popup: "Số điện thoại này đã có tài khoản thành viên.
-                 Vui lòng đăng nhập để tích điểm và dùng đặc quyền thành viên."
-       → [Đăng nhập ngay] → Tiếp tục → Luồng Logged-in (xem bên dưới)
-
-═══════════════════════════════════════════════════
-LUỒNG GUEST — Shadow Account (Case A & B)
-═══════════════════════════════════════════════════
-BƯỜC 1 — Chọn dịch vụ
-→ Khách chọn kích thước xe (S/M/L)
-→ Khách chọn chi nhánh
-→ Khách chọn dịch vụ (tự do 1 hoặc nhiều)
-   → Có thể áp Voucher nếu Shadow Account cũ đã có điểm
+BƯỚC 2 — Chọn xe & dịch vụ
+→ Chọn xe từ danh sách xe đã đăng ký (hoặc thêm xe mới)
+→ Chọn dịch vụ (tự do 1 hoặc nhiều)
+   → Có thể áp Voucher/quà đổi điểm tại bước chọn dịch vụ
 → Hệ thống phân loại booking:
    - **WASH (Type A):** có dịch vụ Nhóm 1 → tính `num_slots = ceil(total_duration/30)`
      → Hiển thị slot có ít nhất `num_slots` slot liên tiếp còn trống (từ hiện tại + 2h)
    - **FLEX (Type B):** không có dịch vụ Nhóm 1 → hiển thị mọi slot từ 7:00–17:30 (từ hiện tại + 2h)
 → Hệ thống tính tổng giá dự kiến + tổng thời lượng dự kiến
 
-BƯỜC 2 — Thông tin liên hệ
-→ Khách nhập: Họ tên (bắt buộc), **Email (bắt buộc)**, Biển số xe (bắt buộc)
-   (Email dùng để gửi OTP, xác nhận lịch, hóa đơn và link Claim Account)
+BƯỚC 3 — Chọn slot
+→ Slot hiển thị theo booking window của tier: Member/Silver/Gold/Platinum
+→ WASH → chọn slot có đủ slot liên tiếp; FLEX → chọn bất kỳ slot 7:00–17:30
 
-BƯỜC 3 — Xác thực OTP
-→ Hệ thống gửi OTP qua **Email** vừa nhập
-→ Khách nhập OTP → Hệ thống xác thực danh tính
-
-BƯỜC 4 — Xác nhận booking
-→ Hệ thống kiểm tra: biển số đang active? rate limit (IP)? max active booking?
-→ Hệ thống giữ slot 10 phút (SLOT_HELD)
-→ Khách review toàn bộ thông tin → Xác nhận → Booking tạo (CONFIRMED)
-→ Hệ thống lưu Email vào Shadow Account
-→ Hệ thống gửi Email xác nhận lịch hẹn
-
-**Nhắc xác nhận (2-tier theo giờ hẹn):**
-→ Nếu slot **≥ 10:00**: gửi Email tại T-2h + nút [XÁC NHẬN SẼ ĐẾN] | [HỦY LỊCH]
-   → Không phản hồi trong **30 phút** → AUTO_CANCELLED (-20 Trust Score)
-→ Nếu slot **< 10:00**: gửi Email lúc **20:00 hôm trước** + nút [XÁC NHẬN SẼ ĐẾN] | [HỦY LỊCH]
-   → Không phản hồi trước **T-1h sáng hôm hẹn** → AUTO_CANCELLED (-20 Trust Score)
-
-Khách đến → Car Washer check-in → Inspection → Dịch vụ → COMPLETED
-→ Khách thanh toán (Cash hoặc PayOS) → Payment PAID → Booking CLOSED
-→ Hệ thống cộng điểm vào Shadow Account
-
-[Claim Account Flow — Sau khi PAID]:
-→ Hệ thống tự động gửi **Email**:
-   "Cảm ơn bạn! Bạn vừa tích được X điểm (hạng **Member**).
-    Kích hoạt tài khoản để dùng điểm đổi quà và nhận đặc quyền thành viên!"
-   [Link kích hoạt — hết hạn sau 7 ngày]
-→ Khách click link → Đặt mật khẩu mới
-→ Tài khoản: SHADOW → ACTIVE
-→ Toàn bộ điểm, lịch sử, Trust Score được giữ nguyên
-
-═══════════════════════════════════════════════════
-LUỒNG LOGGED-IN — Tài khoản ACTIVE (Case C)
-═══════════════════════════════════════════════════
-→ Khách đăng nhập thành công
-→ Chọn xe từ danh sách xe đã đăng ký (hoặc thêm xe mới)
-→ Khách chọn chi nhánh, dịch vụ (tự do 1 hoặc nhiều), slot trống
-   (Slot hiển thị theo booking window của tier: Member/Silver/Gold/Platinum)
-   (Logic WASH/FLEX giống luồng Guest: WASH → slot liên tiếp; FLEX → bất kỳ slot 7:00–17:30)
-   → Có thể áp Voucher/quà đổi điểm tại bước chọn dịch vụ
-→ Hệ thống tính tổng giá dự kiến + thời lượng dự kiến
+BƯỚC 4 — Xác nhận booking
 → Hệ thống kiểm tra: biển số active? max booking (2)? rate limit?
 → Hệ thống giữ slot **10 phút** (SLOT_HELD)
-→ Khách xác nhận booking
+→ Khách review toàn bộ thông tin → Xác nhận
 → Booking tạo (PENDING_CONFIRMATION hoặc CONFIRMED tùy rule BR-BOOK-07)
 → [Nếu cần] Manager xác nhận → CONFIRMED
 → Manager phân công Car Washer → ASSIGNED
@@ -634,35 +570,35 @@ Khách đến → Car Washer check-in → Inspection → Dịch vụ → COMPLET
 → Khách có thể đánh giá hoặc gửi khiếu nại
 ```
 
-## 10.2 Walk-in Booking Flow (Khách vãng lai)
+## 10.2 Walk-in Booking Flow (Khách đến trực tiếp)
 
-> **Lưu ý kỹ thuật:** Walk-in Booking sử dụng **chính xác cùng cơ chế Shadow Account** như luồng Guest online. Manager là người thao tác thay khách hàng.
+> **Lưu ý:** Walk-in yêu cầu khách phải có tài khoản. Manager tạo tài khoản mới cho khách nếu chưa có, hoặc tìm tài khoản hiện tại bằng SĐT.
 
 ```
-Khách vãng lai đến cửa hàng
-→ Manager mở form tạo booking nhanh
+Khách đến cửa hàng không đặt trước
+→ Manager mở form tạo booking Walk-in
 → Manager nhập SĐT của khách
 → Hệ thống kiểm tra SĐT:
 
    ├── Case A: SĐT chưa tồn tại
-   │   → Tạo Shadow Account mới tự động
+   │   → Manager tạo tài khoản mới cho khách
+   │   → Nhập: tên, SĐT, email, mật khẩu tạm
+   │   → Tài khoản tạo với status = ACTIVE
+   │   → Hệ thống tự động gửi Welcome Email (kèm thông tin tài khoản, mật khẩu tạm & link đổi mật khẩu)
    │
-   ├── Case B: SĐT đã là Shadow Account
-   │   → Gộp booking mới vào Shadow Account cũ
-   │
-   └── Case C: SĐT đã có tài khoản ACTIVE
+   └── Case B: SĐT đã có tài khoản
        → Gắn booking trực tiếp vào tài khoản đó
-       → Điểm loyalty được cộng đúng vào tài khoản Active
+       → Điểm loyalty được cộng đúng vào tài khoản
 
-→ Manager nhập thêm: tên khách, biển số, loại xe, dịch vụ, slot
+→ Manager nhập thêm: biển số, loại xe, dịch vụ, slot
 → Manager phân công Car Washer
 → Booking chuyển thẳng ASSIGNED (bỏ qua PENDING_CONFIRMATION)
 → Car Washer thực hiện check-in, inspection, dịch vụ
 → Khách kiểm tra xe, thanh toán
-→ Nếu Case A/B (Shadow): hệ thống cộng điểm vào Shadow Account
-→ Nếu Case C (Active): hệ thống cộng điểm vào tài khoản Active
-→ [Claim Account Flow]: Sau PAID, gửi link kích hoạt nếu là Shadow Account
+→ Hệ thống cộng điểm vào tài khoản Customer
+→ Booking CLOSED
 ```
+
 
 ## 10.3 Vehicle Inspection Flow
 
@@ -673,7 +609,7 @@ Car Washer xác nhận khách đã tới (Check-in)
 → Ghi chú các vết xước, móp, nứt, mất phụ kiện, bất thường
 → Upload hình ảnh xe trước dịch vụ (bắt buộc ít nhất 1 ảnh)
 → Car Washer submit inspection
-→ Customer nhận thông báo / xem trực tiếp tại màn hình kiosk
+→ Customer nhận thông báo / xem trực tiếp tại màn hình kiosk (web app hiển thị trên màn hình tại cửa hàng)
 → Customer xác nhận "Đồng ý với tình trạng xe được ghi nhận"
 → Dịch vụ được phép bắt đầu
 
@@ -750,8 +686,8 @@ Nếu hủy trong vòng 30 phút trước giờ hẹn (chưa confirm T-2h):
 → Trust Score: -20 điểm
 → [Nếu Platinum & còn miễn phạt trong tháng]: Không bị trừ điểm
 
-**[SAU KHI KHÁCH XÁC NHẬN SỬ ĐẾỬN tại T-2h]:**
-→ Nút hủy trên web/app bị vô hiệu hóa (disabled)
+**[SAU KHI KHÁCH XÁC NHẬN SẼ ĐẾN tại T-2h]:**
+→ Nút hủy trên web bị vô hiệu hóa (disabled)
 → Khách KHÔNG thể tự hủy online
 → Nếu có sự cố khẩn cấp: gọi điện cho Manager → Manager hủy thủ công (CANCELLED_BY_MANAGER) -20 Trust Score (không ngoại lệ, trừ Platinum)
 
@@ -771,13 +707,11 @@ Nếu không hủy mà không đến (NO_SHOW):
 
 | ID | Yêu cầu |
 |---|---|
-| FR-AUTH-01 | Guest đặt lịch lần đầu: hệ thống gửi OTP xác thực qua **Email** (nhập ở trang thông tin liên hệ). Customer đăng ký tài khoản ACTIVE: OTP xác thực qua Email. |
+| FR-AUTH-01 | Customer đăng ký tài khoản: OTP xác thực qua **Email**. Bắt buộc đăng nhập trước khi đặt lịch. |
 | FR-AUTH-02 | Đăng nhập bằng email + mật khẩu. |
 | FR-AUTH-03 | Phân quyền theo role: CUSTOMER / MANAGER / CAR_WASHER / ADMIN. |
-| FR-AUTH-04 | Manager chỉ thấy data của chi nhánh được gán. |
-| FR-AUTH-05 | Session management, đăng xuất. |
-| FR-AUTH-06 | **CTA Phone Number Check:** Khi khách nhập SĐT vào ô đặt lịch nhanh, hệ thống kiểm tra: (A) SĐT chưa tồn tại → tạo Shadow Account mới, tiếp tục đặt; (B) SĐT là Shadow Account → gộp vào Shadow cũ, tiếp tục đặt; (C) SĐT là tài khoản ACTIVE → bắt buộc đăng nhập trước khi đặt. |
-| FR-AUTH-07 | **Claim Account Flow:** Sau khi Shadow Account có Payment PAID, hệ thống tự động gửi **Email** chứa link kích hoạt tài khoản (có hạn 7 ngày). Khách click link, đặt mật khẩu → tài khoản chuyển từ SHADOW sang ACTIVE, giữ nguyên toàn bộ dữ liệu. (Requirement: Shadow Account phải có email mới gửi được — luồng Guest bắt buộc thu thập email; Walk-in nếu không có email thì Claim Account link không được gửi.) |
+| FR-AUTH-04 | Session management, đăng xuất. |
+| FR-AUTH-05 | **Walk-in Account Creation:** Manager có thể tạo tài khoản mới cho khách vãng lai (nhập: tên, SĐT, email, mật khẩu tạm). Tài khoản tạo với status = ACTIVE. Hệ thống tự động gửi Welcome Email chứa thông tin đăng nhập, mật khẩu tạm và link đổi mật khẩu. |
 
 ## 11.2 Vehicle Management
 
@@ -816,7 +750,7 @@ Nếu không hủy mà không đến (NO_SHOW):
 
 | ID | Yêu cầu |
 |---|---|
-| FR-BOOK-01 | Customer tạo booking: chọn xe, dịch vụ (tự do), chi nhánh, slot. |
+| FR-BOOK-01 | Customer tạo booking: chọn xe, dịch vụ (tự do), slot. |
 | FR-BOOK-02 | Hệ thống kiểm tra rate limit (IP, max active booking, biển số) trước khi tạo booking. |
 | FR-BOOK-03 | Booking hiển thị: giá dự kiến, thời lượng dự kiến, trạng thái. |
 | FR-BOOK-04 | Manager xác nhận booking khi thuộc nhóm cần xác nhận. |
@@ -855,7 +789,7 @@ Nếu không hủy mà không đến (NO_SHOW):
 | FR-LOY-04 | Hệ thống recalculate tier sau mỗi payment thành công. |
 | FR-LOY-05 | Hệ thống review tier định kỳ 12 tháng (cron job), áp dụng sau 30 ngày grace period. |
 | FR-LOY-06 | Customer đổi điểm từ Reward Catalog (3 nhóm: Voucher, Free Wash, Add-on). |
-| FR-LOY-07 | Voucher do đổi điểm có mã riêng, valid time giới hạn, áp dụng **tại bước chọn dịch vụ** khi tạo booking. |
+| FR-LOY-07 | Voucher do đổi điểm có mã riêng, valid time giới hạn, áp dụng **tại bước xác nhận booking (C-08)** khi tạo booking. |
 | FR-LOY-08 | Quà sinh nhật tự động gửi email đầu tháng sinh nhật (Silver: voucher 10%, Gold: Free Wash). |
 
 ## 11.8 Trust Score
@@ -885,23 +819,25 @@ Nếu không hủy mà không đến (NO_SHOW):
 | ID | Yêu cầu | Kênh |
 |---|---|---|
 | FR-NOTI-01 | Xác nhận OTP khi đăng ký | Email |
-| FR-NOTI-02 | Xác nhận booking thành công | Email + In-app |
+| FR-NOTI-02 | Xác nhận booking thành công | Email + Web notification |
 | FR-NOTI-03 | Nhắc lịch + nút Confirm/Cancel: slot ≥ 10:00 gửi tại T-2h; slot < 10:00 gửi lúc 20:00 hôm trước | Email |
-| FR-NOTI-04 | Thông báo AUTO_CANCELLED | Email + In-app |
-| FR-NOTI-05 | Thông báo bị đánh dấu NO_SHOW | In-app |
-| FR-NOTI-06 | Phân công task mới | In-app (Car Washer) |
-| FR-NOTI-07 | Booking update (Manager xác nhận) | In-app (Customer) |
-| FR-NOTI-08 | Complaint update | Email + In-app |
-| FR-NOTI-09 | Thăng hạng thành viên | Email + In-app |
+| FR-NOTI-04 | Thông báo AUTO_CANCELLED | Email + Web notification |
+| FR-NOTI-05 | Thông báo bị đánh dấu NO_SHOW | Web notification |
+| FR-NOTI-06 | Phân công task mới | Web notification (Car Washer) |
+| FR-NOTI-07 | Booking update (Manager xác nhận) | Web notification (Customer) |
+| FR-NOTI-08 | Complaint update | Email + Web notification |
+| FR-NOTI-09 | Thăng hạng thành viên | Email + Web notification |
 | FR-NOTI-10 | Điểm sắp expire (trước 30 ngày) | Email |
 | FR-NOTI-11 | Quà sinh nhật | Email |
+| FR-NOTI-12 | Welcome Email (cho tài khoản tạo tại quầy) | Email |
+| FR-NOTI-13 | Xác nhận hủy lịch thành công (Customer tự hủy) | Email |
 
 ## 11.11 Reporting
 
 | ID | Yêu cầu |
 |---|---|
-| FR-RPT-01 | Dashboard booking theo ngày / chi nhánh / trạng thái (Manager, Admin). |
-| FR-RPT-02 | Báo cáo doanh thu theo ngày, tháng, chi nhánh, dịch vụ (Admin). |
+| FR-RPT-01 | Dashboard booking theo ngày / trạng thái (Manager, Admin). |
+| FR-RPT-02 | Báo cáo doanh thu theo ngày, tháng, dịch vụ (Admin). |
 | FR-RPT-03 | Báo cáo hiệu suất Car Washer: số booking xử lý, rating trung bình. |
 | FR-RPT-04 | Báo cáo complaint: số lượng, trạng thái, thời gian xử lý trung bình. |
 | FR-RPT-05 | Báo cáo loyalty: phân bổ hạng thành viên, điểm đổi thưởng. |
@@ -921,7 +857,7 @@ Nếu không hủy mà không đến (NO_SHOW):
 | BR-BOOK-04 | Một biển số xe tại một thời điểm chỉ được có 1 booking active. |
 | BR-BOOK-05 | Một tài khoản tối đa 2 booking ở trạng thái Pending/Confirmed cùng lúc. |
 | BR-BOOK-06 | Customer chỉ được xem slot trong booking window của tier (Member: 3 ngày, Silver: 7 ngày, Gold: 10 ngày, Platinum: 14 ngày). Slot có giờ bắt đầu < 2 giờ từ hiện tại không được hiển thị với bất kỳ hạng nào. |
-| BR-BOOK-07 | Manager không bắt buộc xác nhận tất cả booking. Chỉ cần xác nhận booking đặc biệt: giá trị cao (> 2M), thời lượng dài (> 4h), booking sát giờ (< 1h), khách có trust score < 60, booking do Manager tạo hộ. |
+| BR-BOOK-07 | Manager không bắt buộc xác nhận tất cả booking. Chỉ cần xác nhận booking đặc biệt: giá trị cao (> 2M), thời lượng dài (> 4h), booking sát giờ (< 1h), khách có trust score < 60. |
 | BR-BOOK-08 | Car Washer assignment nên xảy ra trước khi khách đến. Walk-in có thể assign khi check-in. |
 | BR-BOOK-09 | Inspection bắt buộc trước khi bắt đầu dịch vụ. Customer phải xác nhận. |
 | BR-BOOK-10 | Dịch vụ không thể bắt đầu nếu chưa có Customer confirmation trên inspection. |
@@ -954,10 +890,11 @@ Nếu không hủy mà không đến (NO_SHOW):
 
 | Mã | Rule |
 |---|---|
-| BR-WALK-01 | Manager tạo booking hộ khách vãng lai. |
-| BR-WALK-02 | Thông tin tối thiểu: tên khách, SĐT, biển số, loại xe, dịch vụ, slot. |
-| BR-WALK-03 | Hệ thống kiểm tra SĐT: (A) chưa tồn tại → tạo Shadow Account mới; (B) đã là Shadow → gộp booking vào Shadow cũ; (C) đã có tài khoản ACTIVE → gắn booking vào tài khoản đó. Mọi trưộng hợp đều có loyalty tracking. |
+| BR-WALK-01 | Manager tạo booking tại chỗ (Walk-in) cho khách đến trực tiếp. |
+| BR-WALK-02 | Khách phải có tài khoản để tạo booking. Nếu chưa có, Manager tạo tài khoản mới (tên, SĐT, email, mật khẩu tạm) với status = ACTIVE. |
+| BR-WALK-03 | Nếu SĐT đã có tài khoản: gắn booking vào tài khoản đó. Mọi trường hợp đều có loyalty tracking. |
 | BR-WALK-04 | Walk-in booking bỏ qua bước PENDING_CONFIRMATION, chuyển thẳng ASSIGNED. |
+| BR-WALK-05 | Khi tài khoản Walk-in mới được tạo, hệ thống tự động gửi Welcome Email chứa thông tin tài khoản, mật khẩu tạm thời và đường dẫn thay đổi mật khẩu cho lần đăng nhập đầu tiên. |
 
 ## 12.4 Vehicle Inspection Rules
 
@@ -994,7 +931,7 @@ Nếu không hủy mà không đến (NO_SHOW):
 | BR-LOY-07 | Voucher đổi điểm có mã unique, valid trong 30 ngày, không hoàn điểm nếu không dùng. |
 | BR-LOY-08 | Voucher/quà đổi điểm được áp dụng **tại bước chọn dịch vụ khi tạo booking** (trước khi confirm). Free Wash voucher → dịch vụ tương ứng giảm về 0đ. Discount Voucher → giảm estimated_total_price. Không thể áp sau khi booking đã CONFIRMED. |
 | BR-LOY-09 | Hệ thống kiểm tra voucher: còn hiệu lực (ACTIVE), chưa hết hạn, đúng loại dịch vụ (với Free Wash), và khách hàng sở hữu voucher trước khi cho phép áp. |
-| BR-LOY-10 | **Cross-branch loyalty:** Điểm tch lũy và đổi thưởng áp dụng toàn hệ thống (không giới hạn chi nhánh). Khách tch điểm tại chi nhánh A có thể sử dụng voucher đổi điểm tại chi nhánh B. Quản lý điểm tập trung tại CustomerProfile, không phần mảnh theo chi nhánh. |
+
 
 ## 12.7 Trust Score Rules
 
@@ -1132,28 +1069,12 @@ Sau 12 tháng giữ hạng:
 # 16.5 User Account State Machine
 
 ```
-[Tạo mới] → SHADOW
-│
-├──────────────────────────────────────────────
-│  SHADOW ← tạo tự động khi:
-│     - Khách đặt lịch lần đầu qua CTA Phone Number (Case A)
-│     - Manager tạo booking hộ khách vãng lai chưa có tài khoản
-│     - không có password_hash
-│     - Có đầy đủ Trust Score (100), loyalty tracking, lịch sử booking
-│
-│  SHADOW → ACTIVE
-│     Trigger: Khách click Claim Account Link và đặt mật khẩu
-│     Điều kiện: claim_token hợp lệ + chưa hết hạn (7 ngày)
-│     Kết quả: password_hash được set, status = ACTIVE, claim_token xoá
-│
-│  SHADOW → SHADOW (Case B)
-│     Trigger: Khách có Shadow Account đặt lịch thêm (gộp vào Shadow cũ)
-│     Kết quả: Tạo booking mới trong cùng Shadow Account, điểm cộng dồn
+[Tạo mới] → ACTIVE
 │
 ├──────────────────────────────────────────────
 │  ACTIVE ← tạo khi:
-│     - Khách tự đăng ký thông thường (email + mật khẩu)
-│     - Shadow Account được kích hoạt qua Claim Account Flow
+│     - Khách tự đăng ký thông thường (email + mật khẩu + OTP)
+│     - Manager tạo tài khoản cho khách Walk-in (tên, SĐT, email, mật khẩu tạm)
 │
 │  ACTIVE → INACTIVE
 │     Trigger: Admin/Manager vô hiệu hóa tài khoản
@@ -1162,22 +1083,23 @@ Sau 12 tháng giữ hạng:
 │     Trigger: Admin ban vĩnh viễn (vi phạm nghiêm trọng)
 │
 ├──────────────────────────────────────────────
-   SHADOW hết hạn (Cleanup Policy)
+│  INACTIVE → ACTIVE
+│     Trigger: Admin kích hoạt lại tài khoản
+│
+├──────────────────────────────────────────────
+   Account Cleanup Policy
      Trigger: Cron job hàng ngày
-     Điều kiện: Shadow Account không có giao dịch nào trong 12 tháng
+     Điều kiện: Tài khoản không có giao dịch nào trong 12 tháng
      Kết quả: Chuyển sang INACTIVE (giữ dữ liệu, không xóa)
 ```
 
-**Business Rules bổ sung cho Shadow Account:**
+**Business Rules bổ sung cho Account:**
 
 | Mã | Rule |
 |---|---|
-| BR-AUTH-01 | Shadow Account được tạo với `password_hash = NULL` và `status = SHADOW`. |
-| BR-AUTH-02 | Shadow Account có `claim_token` duy nhất, hết hạn sau 7 ngày kể từ lần có Payment PAID gần nhất. |
-| BR-AUTH-03 | Nếu claim_token hết hạn, hệ thống có thể tự generate token mới khi khách yêu cầu ("Gửi lại link kích hoạt"). |
-| BR-AUTH-04 | Một SĐT chỉ có được duy nhất 1 Shadow Account hoặc 1 Active Account trong hệ thống (không song song). |
-| BR-AUTH-05 | Khi Shadow Account chuyển sang ACTIVE, `claim_token` phải được xóa ngay lập tức (invalidate). |
-| BR-AUTH-06 | Shadow Account không thể sửa thông tin cá nhân hay đổi mật khẩu cho đến khi chuyển sang ACTIVE. |
+| BR-AUTH-01 | Mỗi tài khoản phải có `password_hash` NOT NULL và `status = ACTIVE` khi tạo. |
+| BR-AUTH-02 | Một SĐT chỉ có được duy nhất 1 tài khoản trong hệ thống. |
+| BR-AUTH-03 | Một email chỉ có được duy nhất 1 tài khoản trong hệ thống. |
 
 ---
 
@@ -1189,15 +1111,12 @@ Sau 12 tháng giữ hạng:
 |---|---|---|
 | user_id | UUID | Primary Key |
 | full_name | VARCHAR | Họ tên |
-| email | VARCHAR | Email (unique, nullable nếu chỉ có SĐT) |
+| email | VARCHAR | Email (unique, NOT NULL) |
 | phone | VARCHAR | Số điện thoại (unique) |
-| password_hash | VARCHAR | Mật khẩu đã hash (NULL nếu là Shadow Account) |
+| password_hash | VARCHAR | Mật khẩu đã hash (NOT NULL) |
 | role | ENUM | CUSTOMER / MANAGER / CAR_WASHER / ADMIN |
-| branch_id | UUID | Chi nhánh gán (cho MANAGER / CAR_WASHER) |
-| status | ENUM | **SHADOW** / ACTIVE / INACTIVE / BANNED |
-| email_verified | BOOLEAN | Đã xác thực OTP email/SĐT |
-| claim_token | VARCHAR | Token kích hoạt tài khoản từ Shadow → ACTIVE (nullable) |
-| claim_token_expires_at | TIMESTAMP | Hạn sử dụng token kích hoạt (7 ngày) |
+| status | ENUM | ACTIVE / INACTIVE / BANNED |
+| email_verified | BOOLEAN | Đã xác thực OTP email |
 | created_at | TIMESTAMP | |
 | updated_at | TIMESTAMP | |
 
@@ -1232,18 +1151,18 @@ Sau 12 tháng giữ hạng:
 | status | ENUM | ACTIVE / INACTIVE |
 | created_at | TIMESTAMP | |
 
-## 17.4 Branch
+## 17.4 StoreInfo
 
 | Field | Type | Description |
 |---|---|---|
-| branch_id | UUID | Primary Key |
-| name | VARCHAR | Tên chi nhánh |
+| store_id | UUID | Primary Key |
+| name | VARCHAR | Tên cửa hàng |
 | address | TEXT | Địa chỉ |
-| phone | VARCHAR | Hotline chi nhánh |
+| phone | VARCHAR | Hotline |
 | opening_time | TIME | Giờ mở cửa |
 | closing_time | TIME | Giờ đóng cửa |
 | status | ENUM | ACTIVE / INACTIVE |
-| created_at | TIMESTAMP | |
+| updated_at | TIMESTAMP | |
 
 ## 17.5 ServiceCategory
 
@@ -1283,7 +1202,6 @@ Sau 12 tháng giữ hạng:
 | Field | Type | Description |
 |---|---|---|
 | template_id | UUID | Primary Key |
-| branch_id | UUID | FK → Branch |
 | day_of_week | INT | 0=Chủ nhật..6=Thứ 7 |
 | start_time | TIME | Giờ bắt đầu |
 | end_time | TIME | Giờ kết thúc |
@@ -1295,7 +1213,6 @@ Sau 12 tháng giữ hạng:
 | Field | Type | Description |
 |---|---|---|
 | slot_id | UUID | Primary Key |
-| branch_id | UUID | FK → Branch |
 | date | DATE | Ngày cụ thể |
 | start_time | TIME | Giờ bắt đầu |
 | end_time | TIME | Giờ kết thúc |
@@ -1312,9 +1229,8 @@ Sau 12 tháng giữ hạng:
 | Field | Type | Description |
 |---|---|---|
 | booking_id | UUID | Primary Key |
-| customer_id | UUID | FK → CustomerProfile (nullable nếu guest) |
+| customer_id | UUID | FK → CustomerProfile |
 | vehicle_id | UUID | FK → Vehicle |
-| branch_id | UUID | FK → Branch |
 | booking_type | ENUM | **WASH** / **FLEX** — xác định tự động dựa trên dịch vụ được chọn |
 | start_slot_id | UUID | FK → SlotInstance (slot bắt đầu) |
 | num_slots | INT | Số slot liên tiếp bị chiếm (WASH: `ceil(duration/30)`, FLEX: 1) |
@@ -1530,8 +1446,8 @@ Sau 12 tháng giữ hạng:
 | action | VARCHAR | Tên action |
 | entity_type | VARCHAR | Loại entity |
 | entity_id | UUID | ID entity |
-| old_value | JSONB | Giá trị cũ |
-| new_value | JSONB | Giá trị mới |
+| old_value | NVARCHAR(MAX) | Giá trị cũ (JSON format) |
+| new_value | NVARCHAR(MAX) | Giá trị mới (JSON format) |
 | ip_address | VARCHAR | IP của actor |
 | created_at | TIMESTAMP | |
 
@@ -1563,7 +1479,7 @@ Sau 12 tháng giữ hạng:
 
 | ID | Use Case | Priority |
 |---|---|---|
-| UC-MAN-01 | View Booking Dashboard (by date/branch/status) | Must Have |
+| UC-MAN-01 | View Booking Dashboard (by date/status) | Must Have |
 | UC-MAN-02 | Confirm Booking (special cases) | Must Have |
 | UC-MAN-03 | Create Walk-in Booking | Must Have |
 | UC-MAN-04 | Assign Car Washer | Must Have |
@@ -1591,7 +1507,7 @@ Sau 12 tháng giữ hạng:
 | ID | Use Case | Priority |
 |---|---|---|
 | UC-ADM-01 | Manage Users & Roles | Must Have |
-| UC-ADM-02 | Manage Branches | Must Have |
+| UC-ADM-02 | Manage Store Info | Must Have |
 | UC-ADM-03 | Manage Service Catalog & Pricing | Must Have |
 | UC-ADM-04 | Configure Slot Template (bays, washers per shift) | Must Have |
 | UC-ADM-05 | Configure Loyalty Rules (conversion, multiplier, threshold) | Must Have |
@@ -1619,8 +1535,7 @@ DELETE /vehicles/{vehicleId}
 
 GET    /services?vehicleSize=SMALL            → Danh mục dịch vụ + giá theo loại xe
 GET    /services/{serviceId}
-GET    /branches
-GET    /slots?branchId=&date=&vehicleSize=    → Slot trống (lọc theo tier)
+GET    /slots?date=&vehicleSize=               → Slot trống (lọc theo tier)
 POST   /slots/estimate                        → Tính tổng giá + thời lượng dự kiến
 
 POST   /bookings/hold                         → Giữ slot 10 phút
@@ -1656,7 +1571,7 @@ PATCH  /manager/bookings/{bookingId}/confirm
 PATCH  /manager/bookings/{bookingId}/assign   → Phân công Car Washer
 PATCH  /manager/bookings/{bookingId}/cancel
 PATCH  /manager/bookings/{bookingId}/no-show
-POST   /manager/bookings/walk-in              → Tạo booking vãng lai
+POST   /manager/bookings/walk-in              → Tạo booking Walk-in (+ tạo account nếu cần)
 
 GET    /manager/complaints
 PATCH  /manager/complaints/{complaintId}      → Xử lý complaint
@@ -1664,7 +1579,7 @@ PATCH  /manager/customers/{customerId}/trust-score/unlock  → Unlock Trust Scor
 PATCH  /manager/customers/{customerId}/loyalty/adjust      → Điều chỉnh điểm
 
 GET    /manager/reports/daily
-GET    /manager/slots?date=&branchId=         → Xem slot + capacity realtime
+GET    /manager/slots?date=                   → Xem slot + capacity realtime
 ```
 
 ## Car Washer APIs
@@ -1683,7 +1598,7 @@ POST   /washer/bookings/{bookingId}/inspections/post    → Post-service inspect
 
 ```
 GET/POST/PATCH /admin/users
-GET/POST/PATCH /admin/branches
+GET/PATCH      /admin/store-info
 GET/POST/PATCH /admin/services
 GET/POST/PATCH /admin/service-prices
 GET/POST/PATCH /admin/slot-templates
@@ -1710,10 +1625,9 @@ POST   /webhooks/payos                        → PayOS payment callback
 1. Mật khẩu phải được hash (bcrypt / Argon2).
 2. API bắt buộc kiểm tra role trước mọi action.
 3. Customer chỉ xem/thao tác data của chính mình.
-4. Manager chỉ xem data của chi nhánh được gán.
-5. PayOS webhook phải xác thực signature.
-6. Các action quan trọng ghi AuditLog (tạo/hủy booking, payment, loyalty adjustment, trust score change, complaint resolution).
-7. Rate limiting trên tất cả endpoint public (đặc biệt endpoint đặt lịch).
+4. PayOS webhook phải xác thực signature.
+5. Các action quan trọng ghi AuditLog (tạo/hủy booking, payment, loyalty adjustment, trust score change, complaint resolution).
+6. Rate limiting trên tất cả endpoint public (đặc biệt endpoint đặt lịch).
 
 ## 20.2 Performance
 
@@ -1733,7 +1647,7 @@ POST   /webhooks/payos                        → PayOS payment callback
 ## 20.4 Usability
 
 1. Customer booking flow tối đa 5 bước từ trang chủ đến confirm.
-2. Manager dashboard lọc nhanh theo ngày / trạng thái / chi nhánh.
+2. Manager dashboard lọc nhanh theo ngày / trạng thái.
 3. Car Washer UI tối giản, thao tác 1 chạm cho mỗi bước workflow.
 4. Email T-2h phải có nút bấm rõ ràng (không cần đăng nhập để confirm).
 
@@ -1774,7 +1688,7 @@ Các action sau bắt buộc có AuditLog:
 | # | Câu hỏi | Quyết định |
 |---|---|---|
 | 1 | Phân loại xe | **Small / Medium / Large** theo kích thước |
-| 2 | Danh mục dịch vụ | **6 nhóm** theo Section 6 |
+| 2 | Danh mục dịch vụ | **5 nhóm** theo Section 6 |
 | 3 | Loyalty tier reset | **12 tháng rolling + 30 ngày grace period** |
 | 4 | Redeem điểm | **3 nhóm**: Voucher, Free Wash, Add-on |
 | 5 | Booking window | **Member: 3 ngày**, Silver: 7 ngày, Gold: 10 ngày, Platinum: 14 ngày. Mọi hạng đều bị chặn slot < 2h từ hiện tại |
@@ -1784,10 +1698,10 @@ Các action sau bắt buộc có AuditLog:
 | 9 | Chọn dịch vụ | **Tự do nhiều dịch vụ** trong 1 booking |
 | 10 | Payment | **Cash + PayOS** |
 | 11 | Slot capacity | `min(Active_Bays, floor(Washers_Online/Min_Per_Car))` |
-| 12 | Booking Flow | **CTA chỉ hỏi SĐT**. Guest flow: (1) Chọn dịch vụ/slot → (2) Nhập thông tin liên hệ khách (tên + Email bắt buộc) → (3) OTP qua Email → (4) Xác nhận booking |
-| 13 | Guest Booking | **Có**, qua Shadow Account + OTP qua Email. Không cho phép đặt hoàn toàn ẩn danh |
-| 14 | Claim Account | **Có**, qua link gửi trong email sau Payment PAID. Link hết hạn sau 7 ngày |
-| 15 | Multi-branch | **In Scope** — kiến trúc đã sẵn sàng từ đầu (branch_id trong mọi entity liên quan) |
+| 12 | Booking Flow | **Bắt buộc đăng nhập**. Customer đăng nhập → chọn xe → chọn dịch vụ/slot → xác nhận booking |
+| 13 | Guest Booking | **Không có Guest Booking**. Bắt buộc đăng nhập. Walk-in: Manager tạo tài khoản cho khách |
+| 14 | Claim Account | **Không có**. Không còn Shadow Account |
+| 15 | Multi-branch | **Out of Scope** — single store, sử dụng StoreInfo entity (Admin editable) |
 | 16 | Slot hold time | **10 phút**. Hết hạn → EXPIRED, slot giải phóng |
 | 17 | Hạng cơ bản | **Member** (thành viên, cũ là Bronze), booking window 3 ngày, multiplier ×1.0 |
 | 18 | Slot unit | **30 phút**. WASH booking: chặn `num_slots = ceil(duration/30)` slot liên tiếp, kiểm tra capacity. FLEX booking: chọn bất kỳ slot 7:00–17:30, không kiểm tra capacity, không tăng `booked_count`. |
@@ -1800,7 +1714,7 @@ Các action sau bắt buộc có AuditLog:
 
 1. Customer Gold đăng nhập.
 2. Chọn xe Medium.
-3. Xem dịch vụ → Chọn Gói Full Premium (280k) + Khử mùi Ozone (150k) = **430k dự kiến, 120 phút**.
+3. Xem dịch vụ → Chọn AW Detail Wash (SVC-W-02, Medium = 280k) + Khử mùi Ozone (150k) = **430k dự kiến, 120 phút**.
 4. Chọn slot ngày sau (trong 10-ngày window của Gold).
 5. Confirm trong **10 phút** → Booking CONFIRMED.
 6. Manager phân công Car Washer → ASSIGNED.
@@ -1825,12 +1739,12 @@ Các action sau bắt buộc có AuditLog:
 ## Scenario 3: Khách vãng lai (Walk-in)
 
 1. Khách đến không đặt trước.
-2. Manager tạo booking: nhập SĐT → không tìm thấy account → tạo **Shadow Account** mới.
-3. Chọn xe Large, dịch vụ Gói Full Basic (170k), slot ngay trong hôm nay.
+2. Manager tạo booking: nhập SĐT → không tìm thấy account → **tạo tài khoản mới** (tên, SĐT, email, mật khẩu tạm).
+3. Chọn xe Large, dịch vụ AW Basic Wash (SVC-W-01, Large = 190k), slot ngay trong hôm nay.
 4. Phân công Car Washer.
 5. Car Washer inspection → Khách xác nhận → Thực hiện.
 6. Khách kiểm tra xe, thanh toán Cash. Payment PAID → Booking CLOSED.
-7. Hệ thống cộng điểm vào Shadow Account + gửi Email Claim Account link.
+7. Hệ thống cộng điểm vào tài khoản Customer.
 
 ## Scenario 4: Khiếu nại sau dịch vụ
 

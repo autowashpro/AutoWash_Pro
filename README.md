@@ -1,101 +1,120 @@
-﻿# 🚗 AutoWash Pro — Hệ thống Đặt lịch Rửa xe Thông minh
+# 🚗 AutoWash Pro — Hệ thống Đặt lịch Rửa xe Thông minh
 
 > **SWP391** · FPT University · Summer 2026
 
-Hệ thống quản lý đặt lịch rửa xe đa chi nhánh với các tính năng: booking thông minh 2 loại (WASH / FLEX), loyalty program, quản lý vận hành real-time.
+AutoWash Pro là hệ thống Web tích hợp quản lý đặt lịch và vận hành rửa xe thông minh cho một cửa hàng duy nhất (Single-Store). Hệ thống tập trung tối ưu hóa hiệu suất cầu nâng, quản lý nhân viên rửa xe (Car Washer), cung cấp quy trình kiểm tra xe chặt chẽ (Vehicle Inspection) và nâng cao trải nghiệm khách hàng qua chương trình Loyalty.
 
 ---
 
-## 👥 Team
+## 👥 Thành viên Dự án (Team)
 
-| Họ tên | MSSV | Vai trò |
+| MSSV | Họ và tên | Vai trò | Công nghệ |
+|---|---|---|---|
+| **SE170313** | Nguyễn Thành Đạt | ★ Leader / BA / Frontend | ReactJS |
+| **SE170044** | Nguyễn Thành Toàn | Backend | .NET |
+| **SE170434** | Nguyễn Anh Tuấn | Backend | .NET |
+| **SE185025** | Nguyễn Trí Vũ | Frontend | ReactJS |
+
+---
+
+## 📁 Hệ thống Tài liệu Thiết kế (Design Docs)
+
+Các tài liệu thiết kế chi tiết nằm tại thư mục [docs/](docs) đã được hoàn thiện và đồng bộ hóa:
+
+| Tài liệu | Mô tả | Trạng thái |
 |---|---|---|
-| [Tên thành viên 1] | [MSSV] | Team Leader / Backend |
-| [Tên thành viên 2] | [MSSV] | Backend |
-| [Tên thành viên 3] | [MSSV] | Frontend |
-| [Tên thành viên 4] | [MSSV] | Frontend |
-| [Tên thành viên 5] | [MSSV] | Tester / BA |
+| [📋 BRD — Business Requirements](docs/brd_he_thong_rua_xe_thong_minh.md) | Đặc tả yêu cầu nghiệp vụ, luồng xử lý, quy tắc phạt điểm uy tín, kịch bản demo | ✅ Hoàn thành (v2.4) |
+| [🛒 Service Catalog](docs/service_catalog.md) | Danh mục chi tiết 36 dịch vụ chia làm 5 nhóm chính (WASH & FLEX) | ✅ Hoàn thành (v1.0) |
+| [🗄️ ERD Diagram](docs/erd_diagram.md) | Sơ đồ cơ sở dữ liệu chi tiết với 25 thực thể được chuẩn hóa | ✅ Hoàn thành (v1.0) |
+| [🔌 API Contract](docs/api_contract.md) | Tài liệu mô tả chi tiết khoảng 73 endpoints API phân quyền theo 5 roles chính | ✅ Hoàn thành (v1.0) |
+| [🖼️ Wireframe & UI Flow](docs/ui_flow_wireframe.md) | Sơ đồ chuyển trang, chi tiết wireframe của từng màn hình (Customer, Washer, Manager, Admin) | ✅ Hoàn thành (v1.0) |
 
 ---
 
-## 📁 Tài liệu Thiết kế
+## 🏗️ Kiến trúc Hệ thống
 
-| Tài liệu | Mô tả | Phiên bản |
-|---|---|---|
-| [📋 BRD — Business Requirements](docs/brd_he_thong_rua_xe_thong_minh.md) | Đặc tả nghiệp vụ, state machine, edge cases | v2.3 |
-| [🛒 Service Catalog](docs/service_catalog.md) | Danh mục dịch vụ, phân nhóm WASH / FLEX | v1.0 |
-| [🗄️ ERD Diagram](docs/erd_diagram.md) | Entity Relationship Diagram (25 entities) | v1.0 |
-| [🔌 API Contract](docs/api_contract.md) | Đặc tả API ~72 endpoints, 6 roles | v1.0 |
-| [🖼️ Wireframe & UI Flow](docs/ui_flow_wireframe.md) | Screen inventory, navigation, flow diagrams | v1.0 |
-
----
-
-## 🏗️ Kiến trúc hệ thống
+Hệ thống được phát triển hoàn toàn trên nền tảng **Web** (Responsive trên Mobile cho Customer và Car Washer; Desktop-first cho Manager và Admin). Không xây dựng Mobile App độc lập.
 
 ```
-AutoWash Pro
-├── 📱 Customer App    (React Native / Flutter)
-├── 🌐 Manager Web     (React / Next.js)
-├── 📱 Car Washer App  (React Native / Flutter)
-├── ⚙️  Admin Web      (React / Next.js)
-└── 🔧 Backend API     (Spring Boot + PostgreSQL)
+AutoWash Pro (Single Store)
+├── 🌐 Customer Web     (React + Next.js - Responsive)
+├── 🌐 Washer Web       (React + Next.js - Responsive)
+├── 🌐 Manager Web      (React + Next.js - Desktop)
+├── 🌐 Admin Web        (React + Next.js - Desktop)
+└── 🔧 Backend API      (.NET Core + SQL Server)
 ```
 
-### Tech Stack (dự kiến)
-| Layer | Technology |
-|---|---|
-| Backend | Spring Boot 3.x, Java 21 |
-| Database | PostgreSQL 16 |
-| Mobile | React Native / Flutter |
-| Web | React + Next.js |
-| Auth | JWT (Access + Refresh token) |
-| Payment | PayOS |
-| Storage | Firebase Storage / S3 |
+### Công nghệ Sử dụng (Tech Stack)
+
+*   **Backend:** .NET (ASP.NET Core 8)
+*   **Database:** SQL Server
+*   **Frontend Web:** React + Next.js
+*   **Authentication:** JWT (Access Token + Refresh Token)
+*   **Payment Gateway:** Tích hợp PayOS (Thanh toán qua mã QR động)
+*   **Storage Cloud:** Firebase Storage hoặc Amazon S3 (để lưu trữ ảnh biên bản kiểm tra xe, ảnh profile)
+*   **Notification:** Email Service (Gửi mail xác nhận, mã OTP, Welcome Email cho khách Walk-in)
 
 ---
 
-## 🎯 Business Logic nổi bật
+## 🎯 Các Quy tắc Nghiệp vụ nổi bật (Business Logic)
 
-- **2-tier Booking:** WASH (chiếm slot liên tiếp, kiểm tra capacity) vs FLEX (chọn slot tự do, không chiếm bay)
-- **30-Shine Pattern:** CTA bằng SĐT → Shadow/Active account flow
-- **T-2h Notification:** Nhắc lịch + phạt Trust Score nếu không phản hồi
-- **Loyalty System:** Tích điểm, 4 tiers (MEMBER / SILVER / GOLD / PLATINUM), đổi voucher
-- **Multi-branch:** Dữ liệu phân tách theo chi nhánh, thống nhất pricing toàn quốc
+### 1. Đặt lịch Hai phân lớp (2-tier Booking)
+*   **WASH (Phân nhóm 1 - Chiếm cầu nâng):** Đặt lịch các dịch vụ rửa xe thông dụng. Hệ thống chặn các slot 30 phút liên tiếp (`ceil(duration/30)`), kiểm tra Capacity (số lượng cầu nâng tối đa) để đảm bảo không bị quá tải.
+*   **FLEX (Phân nhóm 2-5 - Không chiếm cầu nâng):** Dành cho các dịch vụ chăm sóc nâng cao (vệ sinh nội thất, đánh bóng, phủ ceramic...). Khách chọn slot giờ hẹn tư vấn bất kỳ (từ 7:00 – 17:30). Không kiểm tra capacity cầu nâng, Manager sẽ phân bổ Car Washer thủ công dựa trên workload thực tế.
+
+### 2. Yêu cầu Đăng nhập bắt buộc (Login Required)
+*   Để tăng tính định danh và phòng chống spam lịch ảo, hệ thống **không hỗ trợ Guest Booking**. Khách đặt lịch online bắt buộc phải đăng nhập tài khoản.
+*   Không còn cơ chế tài khoản ảo (Shadow Account) phức tạp.
+
+### 3. Đặt lịch Trực tiếp tại quầy (Walk-in Booking)
+*   Manager có thể tạo tài khoản và đặt lịch trực tiếp cho khách vãng lai bằng Số điện thoại.
+*   Nếu khách hàng chưa có tài khoản, Manager tạo tài khoản (ACTIVE) với mật khẩu tạm thời. Hệ thống sẽ tự động kích hoạt gửi **Welcome Email** chứa thông tin tài khoản, mật khẩu tạm và link đổi mật khẩu.
+*   Booking tạo qua luồng Walk-in sẽ tự động bỏ qua bước xác nhận trực tuyến, chuyển thẳng sang trạng thái `ASSIGNED` (Đã phân công).
+
+### 4. Quy trình Kiểm tra xe Chặt chẽ (Vehicle Inspection Flow)
+*   **Trước dịch vụ (Pre-service):** Car Washer kiểm tra, ghi nhận tình trạng xe (vết xước, hư hại nếu có) kèm hình ảnh minh chứng. Khách hàng thực hiện xác nhận tình trạng xe thông qua trang Customer Web (`POST /customer/bookings/:id/confirm-vehicle-condition`) để chuyển trạng thái sang `CUSTOMER_CONFIRMED_CONDITION` trước khi thực hiện dịch vụ.
+*   **Sau dịch vụ (Post-service):** Đánh giá chất lượng rửa và bàn giao xe an toàn cho khách.
+
+### 5. Hệ thống Thành viên & Ưu đãi (Loyalty Program)
+*   Khách hàng tích điểm (Loyalty Points) dựa trên giá trị thanh toán của booking.
+*   Phân chia thành 4 hạng thành viên: **MEMBER ➔ SILVER ➔ GOLD ➔ PLATINUM**.
+*   Khách hàng sử dụng điểm tích lũy để đổi thành các Voucher giảm giá áp dụng trực tiếp khi đặt lịch.
+
+### 6. Cơ chế Chống spam lịch ảo (Trust Score System)
+*   Mỗi tài khoản có điểm uy tín mặc định là **100**.
+*   **Quy tắc đặt lịch:** Khách hàng chỉ được đặt lịch trước thời điểm bắt đầu tối thiểu 2 tiếng.
+*   **Nhắc lịch (T-2h notification):** Hệ thống gửi email nhắc nhở trước 2 tiếng. Khách hàng phải xác nhận hoặc lịch sẽ tự động hủy (`AUTO_CANCELLED`).
+*   **Phạt Uy tín:** Hủy lịch sát giờ (dưới 2 tiếng) hoặc không đến cửa hàng (No-show) sẽ bị trừ điểm uy tín (Trust Score). Nếu điểm uy tín giảm quá sâu, tài khoản sẽ bị khóa quyền đặt lịch online (phải đến tiệm làm Walk-in).
 
 ---
 
-## 📊 Trạng thái dự án
+## 📊 Trạng thái Dự án (Project Status)
 
-| Phase | Status |
-|---|---|
-| ✅ Business Analysis & BRD | Hoàn thành |
-| ✅ ERD & Database Design | Hoàn thành |
-| ✅ API Contract | Hoàn thành |
-| ✅ Wireframe & UI Flow | Hoàn thành |
-| 🔄 Implementation | Đang thực hiện |
-| ⏳ Testing | Chưa bắt đầu |
-| ⏳ Deployment | Chưa bắt đầu |
+| Giai đoạn (Phase) | Chi tiết | Trạng thái (Status) |
+|---|---|---|
+| **Phase 1: Yêu cầu & Thiết kế** | BA, BRD, Catalog dịch vụ, ERD Database, Thiết kế API Contract, Thiết kế Wireframe | ✅ Hoàn thành |
+| **Phase 2: Xây dựng cơ sở** | Thiết kế Database SQL Server, cài đặt khung Backend (.NET) và Frontend (Next.js) | 🔄 Đang triển khai |
+| **Phase 3: Phát triển tính năng** | Phát triển API, dựng UI/UX cho các phân hệ phân quyền | ⏳ Chưa bắt đầu |
+| **Phase 4: Tích hợp & Kiểm thử** | Tích hợp PayOS, Firebase Storage, test luồng nghiệp vụ | ⏳ Chưa bắt đầu |
+| **Phase 5: Bàn giao & Triển khai** | Triển khai môi trường Production, nghiệm thu đề tài | ⏳ Chưa bắt đầu |
 
 ---
 
-## 🚀 Hướng dẫn chạy dự án
+## 🚀 Hướng dẫn Cài đặt & Chạy dự án
 
-> *(Cập nhật sau khi có code)*
+*(Sẽ cập nhật chi tiết các lệnh cấu hình môi trường, file `.env` khi dự án chuyển sang giai đoạn Coding)*
 
 ```bash
-# Backend
+# 1. Khởi chạy Backend (.NET Core API)
 cd backend
-./mvnw spring-boot:run
+dotnet restore
+dotnet run
 
-# Frontend Web
+# 2. Khởi chạy Frontend Web (React + Next.js)
 cd frontend-web
-npm install && npm run dev
-
-# Mobile
-cd mobile
-npm install && npx expo start
+npm install
+npm run dev
 ```
 
 ---
-
-*Cập nhật lần cuối: 2026-05-23*
+*Cập nhật lần cuối: 2026-05-29*

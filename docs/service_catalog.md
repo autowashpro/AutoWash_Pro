@@ -2,7 +2,7 @@
 
 ## 1. Nhóm dịch vụ: Rửa xe & combo
 
-### 1.1. VW Basic Wash
+### 1.1. AW Basic Wash
 
 Loại dịch vụ: Dịch vụ slot
 Thời lượng: 20 phút
@@ -25,7 +25,7 @@ Bao gồm:
 
 ---
 
-### 1.2. VW Detail Wash
+### 1.2. AW Detail Wash
 
 Loại dịch vụ: Dịch vụ slot
 Thời lượng: 20 phút
@@ -58,7 +58,7 @@ Xe đi hằng ngày, có bụi bẩn nhẹ đến vừa, muốn sạch kỹ hơn
 
 ---
 
-### 1.3. VW Ultimate Wash
+### 1.3. AW Ultimate Wash
 
 Loại dịch vụ: Dịch vụ slot
 Thời lượng: 40 phút
@@ -705,9 +705,9 @@ Bảng giá theo size xe:
 
 Các dịch vụ này có thể cho khách đặt trực tiếp trên hệ thống nếu còn slot:
 
-* VW Basic Wash
-* VW Detail Wash
-* VW Ultimate Wash
+* AW Basic Wash
+* AW Detail Wash
+* AW Ultimate Wash
 * Rửa xe ngoài
 * Rửa gầm
 

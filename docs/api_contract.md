@@ -1,4 +1,4 @@
-﻿# API Contract — AutoWash Pro
+# API Contract — AutoWash Pro
 
 **Version:** 1.0 | **BRD:** v2.3 | **Ngày:** 2026-05-23
 
@@ -9,7 +9,7 @@
 ### 1.1 Base URL
 ```
 Production : https://api.autowash.pro/v1
-Development: http://localhost:8080/api/v1
+Development: http://localhost:5000/api/v1
 ```
 
 ### 1.2 Authentication
@@ -20,7 +20,7 @@ Header: Authorization: Bearer <jwt_access_token>
 | Level | Mô tả |
 |---|---|
 | `PUBLIC` | Không cần token |
-| `CUSTOMER` | JWT — role: CUSTOMER (ACTIVE hoặc SHADOW) |
+| `CUSTOMER` | JWT — role: CUSTOMER |
 | `MANAGER` | JWT — role: MANAGER |
 | `CAR_WASHER` | JWT — role: CAR_WASHER |
 | `ADMIN` | JWT — role: ADMIN |
@@ -81,32 +81,7 @@ Header: Authorization: Bearer <jwt_access_token>
 
 ## 2. Auth APIs
 
-### 2.1 Kiểm tra SĐT (CTA Pattern)
-```
-POST /auth/check-phone
-Auth: PUBLIC
-```
-> Dùng ở CTA đặt lịch. Kiểm tra SĐT đã có tài khoản ACTIVE chưa.
-
-**Request:**
-```json
-{ "phone": "0901234567" }
-```
-**Response:**
-```json
-{
-  "data": {
-    "exists": true,
-    "status": "ACTIVE",
-    "requireLogin": true
-  }
-}
-```
-> `status`: `"ACTIVE"` → yêu cầu login | `"SHADOW"` / `"NOT_FOUND"` → tiếp tục luồng guest
-
----
-
-### 2.2 Đăng ký tài khoản
+### 2.1 Đăng ký tài khoản
 ```
 POST /auth/register
 Auth: PUBLIC
@@ -133,7 +108,7 @@ Auth: PUBLIC
 
 ---
 
-### 2.3 Xác thực OTP
+### 2.2 Xác thực OTP
 ```
 POST /auth/verify-otp
 Auth: PUBLIC
@@ -161,7 +136,7 @@ Auth: PUBLIC
 
 ---
 
-### 2.4 Đăng nhập
+### 2.3 Đăng nhập
 ```
 POST /auth/login
 Auth: PUBLIC
@@ -176,7 +151,7 @@ Auth: PUBLIC
 
 ---
 
-### 2.5 Refresh Token
+### 2.4 Refresh Token
 ```
 POST /auth/refresh-token
 Auth: PUBLIC
@@ -197,7 +172,7 @@ Auth: PUBLIC
 
 ---
 
-### 2.6 Đăng xuất
+### 2.5 Đăng xuất
 ```
 POST /auth/logout
 Auth: CUSTOMER | STAFF | ADMIN
@@ -206,68 +181,23 @@ Auth: CUSTOMER | STAFF | ADMIN
 
 ---
 
-### 2.7 Kích hoạt Shadow Account (Claim Account)
+## 3. Public APIs
+
+### 3.1 Thông tin cửa hàng
 ```
-POST /auth/claim-account
+GET /store-info
 Auth: PUBLIC
-```
-**Request:**
-```json
-{
-  "claim_token": "abc123xyz",
-  "email": "a@gmail.com",
-  "password": "Abc@12345"
-}
 ```
 **Response:**
 ```json
 {
   "data": {
-    "access_token": "eyJ...",
-    "refresh_token": "eyJ...",
-    "user": { "user_id": "uuid", "status": "ACTIVE" },
-    "message": "Tài khoản đã được kích hoạt. Toàn bộ lịch sử và điểm tích lũy đã được giữ lại."
+    "name": "AutoWash Pro",
+    "address": "123 Nguyễn Huệ, Q1, HCM",
+    "phone": "028-1234-5678",
+    "opening_time": "07:00",
+    "closing_time": "18:00"
   }
-}
-```
-**Errors:** `410 GONE` nếu token hết hạn | `404` nếu token không tồn tại
-
----
-
-### 2.8 Gửi lại link kích hoạt
-```
-POST /auth/resend-claim-link
-Auth: PUBLIC
-```
-**Request:**
-```json
-{ "phone": "0901234567", "email": "a@gmail.com" }
-```
-**Response:** `200` — gửi email mới
-
----
-
-## 3. Public APIs
-
-### 3.1 Danh sách chi nhánh
-```
-GET /branches
-Auth: PUBLIC
-```
-**Response:**
-```json
-{
-  "data": [
-    {
-      "branch_id": "uuid",
-      "name": "Chi nhánh Quận 1",
-      "address": "123 Nguyễn Huệ, Q1, HCM",
-      "phone": "028-1234-5678",
-      "opening_time": "07:00",
-      "closing_time": "18:00",
-      "status": "ACTIVE"
-    }
-  ]
 }
 ```
 
@@ -315,7 +245,6 @@ Auth: PUBLIC
 **Request:**
 ```json
 {
-  "branch_id": "uuid",
   "date": "2026-06-01",
   "service_ids": ["uuid1", "uuid2"],
   "vehicle_size": "MEDIUM"
@@ -345,6 +274,7 @@ Auth: PUBLIC
 ---
 
 ### 3.4 Reward Catalog (public)
+
 ```
 GET /rewards/catalog
 Auth: PUBLIC
@@ -452,14 +382,13 @@ Auth: CUSTOMER
 ### 4.7 Giữ slot (bước 1 booking)
 ```
 POST /bookings/hold-slot
-Auth: CUSTOMER | PUBLIC
+Auth: CUSTOMER
 ```
 > Giữ slot 10 phút. Trả về `slot_hold_token` cho bước tạo booking.
 
 **Request:**
 ```json
 {
-  "branch_id": "uuid",
   "slot_id": "uuid",
   "service_ids": ["uuid1", "uuid2"],
   "vehicle_size": "MEDIUM"
@@ -489,7 +418,7 @@ Auth: CUSTOMER | PUBLIC
 ### 4.8 Tạo booking (bước 2)
 ```
 POST /bookings
-Auth: CUSTOMER | PUBLIC
+Auth: CUSTOMER
 ```
 **Request:**
 ```json
@@ -498,30 +427,23 @@ Auth: CUSTOMER | PUBLIC
   "vehicle_id": "uuid",
   "service_ids": ["uuid1", "uuid2"],
   "voucher_code": "VCH-XXXXXX",
-  "guest_info": {
-    "full_name": "Nguyễn Văn A",
-    "phone": "0901234567",
-    "email": "a@gmail.com"
-  },
   "notes": "Xe có vết xước nhỏ bên hông phải"
 }
 ```
-> `guest_info` — chỉ cần nếu chưa login.
 
 **Response:** `201`
 ```json
 {
   "data": {
     "booking_id": "uuid",
+    "booking_source": "ONLINE",
     "status": "CONFIRMED",
     "booking_type": "WASH",
-    "branch": { "name": "Chi nhánh Quận 1" },
     "slot": { "date": "2026-06-01", "start_time": "09:00" },
     "services": [{ "name": "Rửa xe cơ bản", "price": 80000 }],
     "estimated_total_price": 160000,
     "discount_amount": 0,
-    "final_estimate": 160000,
-    "claim_account_available": true
+    "final_estimate": 160000
   }
 }
 ```
@@ -693,8 +615,6 @@ Auth: CUSTOMER
 
 ## 5. Manager APIs
 
-> Manager chỉ thấy data của chi nhánh được gán (branch_id từ JWT).
-
 ### 5.1 Dashboard — Danh sách booking
 ```
 GET /manager/bookings?date=2026-06-01&status=CONFIRMED&page=1
@@ -745,18 +665,22 @@ Auth: MANAGER
 POST /manager/bookings/walk-in
 Auth: MANAGER
 ```
+> Manager tạo tài khoản cho khách walk-in (hoặc tìm tài khoản theo SĐT nếu đã tồn tại), sau đó tạo booking. Nếu tài khoản mới được tạo, hệ thống sẽ tự động kích hoạt gửi Welcome Email chứa thông tin đăng nhập, mật khẩu tạm thời (`temp_password`) và link thay đổi mật khẩu.
+
 **Request:**
 ```json
 {
   "customer_info": {
     "full_name": "Lê Thị C",
     "phone": "0912345678",
-    "email": "c@gmail.com"
+    "email": "c@gmail.com",
+    "temp_password": "Temp@12345"
   },
   "vehicle": {
     "license_plate": "51B-99999",
     "brand": "Honda",
     "model": "CR-V",
+    "color": "Trắng",
     "vehicle_size": "LARGE"
   },
   "slot_id": "uuid",
@@ -764,9 +688,20 @@ Auth: MANAGER
   "notes": "Khách walk-in"
 }
 ```
-**Response:** `201` — booking với `booking_source: WALK_IN`
-
-> Hệ thống tự check SĐT: tạo Shadow Account mới / gộp vào Shadow cũ / gắn vào Active account.
+**Response:** `201`
+```json
+{
+  "data": {
+    "booking_id": "uuid",
+    "booking_source": "WALK_IN",
+    "status": "CONFIRMED",
+    "user_id": "uuid",
+    "account_created": true,
+    "message": "Tài khoản mới đã được tạo cho khách."
+  }
+}
+```
+> `account_created`: `true` nếu tài khoản mới được tạo, `false` nếu đã tồn tại theo SĐT.
 
 ---
 
@@ -778,6 +713,17 @@ Auth: MANAGER
 **Request:**
 ```json
 { "car_washer_id": "uuid" }
+```
+**Response:**
+```json
+{
+  "data": {
+    "booking_id": "uuid",
+    "status": "ASSIGNED",
+    "car_washer_id": "uuid",
+    "car_washer_name": "Trần Văn B"
+  }
+}
 ```
 **Errors:** `422 BOOKING_STATUS_INVALID` — chỉ assign khi CONFIRMED
 
@@ -1050,12 +996,17 @@ Auth: MANAGER
 {
   "data": {
     "total_bookings": 312,
-    "by_status": { "COMPLETED": 285, "NO_SHOW": 12, "CANCELLED": 15 },
+    "by_status": {
+      "COMPLETED": 285,
+      "NO_SHOW": 12,
+      "CANCELLED": 15
+    },
     "by_type": { "WASH": 200, "FLEX": 112 },
     "total_revenue": 45600000
   }
 }
 ```
+> `CANCELLED` là tổng hợp của `CANCELLED_BY_CUSTOMER + CANCELLED_BY_MANAGER + AUTO_CANCELLED`.
 
 ---
 
@@ -1162,11 +1113,32 @@ description : Vết xước cánh cửa sau phải
 PUT /washer/tasks/:booking_id/start
 Auth: CAR_WASHER
 ```
-> Chỉ sau khi `customer_confirmed = true` trên inspection BEFORE_SERVICE.
+> Chỉ sau khi `customer_confirmed = true` trên inspection BEFORE_SERVICE. Khách xác nhận qua endpoint `POST /customer/bookings/:booking_id/confirm-vehicle-condition`.
 
 **Response:** `status → IN_PROGRESS`
 
 **Errors:** `422 INSPECTION_NOT_CONFIRMED`
+
+---
+
+### 6.6b Xác nhận tình trạng xe (Customer)
+```
+POST /customer/bookings/:booking_id/confirm-vehicle-condition
+Auth: CUSTOMER
+```
+> Khách xác nhận inspection BEFORE_SERVICE sau khi xem kết quả kiểm tra xe. Chuyển trạng thái booking sang `CUSTOMER_CONFIRMED_CONDITION`.
+
+**Response:**
+```json
+{
+  "data": {
+    "booking_id": "uuid",
+    "status": "CUSTOMER_CONFIRMED_CONDITION",
+    "message": "Đã xác nhận tình trạng xe. Dịch vụ sắp bắt đầu."
+  }
+}
+```
+**Errors:** `422 INSPECTION_NOT_FOUND` | `409 ALREADY_CONFIRMED`
 
 ---
 
@@ -1185,18 +1157,16 @@ Auth: CAR_WASHER
 
 ## 7. Admin APIs
 
-### 7.1 Quản lý chi nhánh
+### 7.1 Quản lý thông tin cửa hàng (StoreInfo)
 ```
-GET    /admin/branches
-POST   /admin/branches
-PUT    /admin/branches/:branch_id
-DELETE /admin/branches/:branch_id
+GET /admin/store-info
+PUT /admin/store-info
 Auth: ADMIN
 ```
-**POST Request:**
+**PUT Request:**
 ```json
 {
-  "name": "Chi nhánh Bình Thạnh",
+  "name": "AutoWash Pro",
   "address": "456 Đinh Tiên Hoàng, Q.Bình Thạnh",
   "phone": "028-9876-5432",
   "opening_time": "07:00",
@@ -1252,7 +1222,7 @@ Auth: ADMIN
 
 ### 7.4 Quản lý Slot Template
 ```
-GET  /admin/slot-templates?branch_id=uuid
+GET  /admin/slot-templates
 POST /admin/slot-templates
 PUT  /admin/slot-templates/:template_id
 Auth: ADMIN
@@ -1260,7 +1230,6 @@ Auth: ADMIN
 **POST Request:**
 ```json
 {
-  "branch_id": "uuid",
   "day_of_week": 1,
   "start_time": "07:00",
   "end_time": "07:30",
@@ -1278,7 +1247,7 @@ Auth: ADMIN
 ```
 **Request:**
 ```json
-{ "branch_id": "uuid", "from_date": "2026-07-01", "to_date": "2026-07-31" }
+{ "from_date": "2026-07-01", "to_date": "2026-07-31" }
 ```
 
 ---
@@ -1308,7 +1277,6 @@ Auth: ADMIN
   "email": "b@autowash.pro",
   "phone": "0987654321",
   "role": "CAR_WASHER",
-  "branch_id": "uuid",
   "password": "Temp@12345"
 }
 ```
@@ -1368,7 +1336,7 @@ Auth: ADMIN
 
 ### 7.11 Báo cáo toàn hệ thống
 ```
-GET /admin/reports/revenue?from=2026-06-01&to=2026-06-30&branch_id=uuid
+GET /admin/reports/revenue?from=2026-06-01&to=2026-06-30
 GET /admin/reports/trust-score?threshold=60
 GET /admin/reports/loyalty?tier=GOLD
 GET /admin/reports/no-show-trend
@@ -1476,6 +1444,5 @@ Header: x-payos-signature: <hmac_sha256>
 | `ALREADY_RATED` | 409 | Booking đã được đánh giá |
 | `BOOKING_NOT_CLOSED` | 422 | Chỉ rating khi CLOSED |
 | `ACCOUNT_BANNED` | 403 | Tài khoản bị khóa vĩnh viễn |
-| `CLAIM_TOKEN_EXPIRED` | 410 | Token kích hoạt Shadow Account hết hạn |
 | `INSUFFICIENT_POINTS` | 422 | Không đủ điểm để đổi reward |
 | `TIER_NOT_ELIGIBLE` | 422 | Tier không đủ để đổi reward này |
