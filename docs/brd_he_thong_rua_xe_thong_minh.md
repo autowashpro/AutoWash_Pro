@@ -381,34 +381,27 @@ Final_Points = floor(Base_Points × Tier_Multiplier)
 | 250,000đ | Gold | (250,000 ÷ 10,000) × 1.2 | **30 điểm** |
 | 1,000,000đ | Platinum | (1,000,000 ÷ 10,000) × 1.5 | **150 điểm** |
 
-## 7.5 Reward Catalog — Kho quà đổi điểm
+## 7.5 Hệ Thống Voucher Đa Lớp (Advanced Reward Catalog)
 
-### Nhóm 1: Voucher Giảm giá (Discount)
+Khác với các hệ thống rửa xe truyền thống, AutoWash Pro sở hữu một cơ chế phát hành và quản lý Voucher tương đương với các sàn Thương mại điện tử lớn, bao gồm 6 lớp kiểm duyệt chặt chẽ để chống rò rỉ doanh thu:
 
-| Quà | Điểm cần | Giá trị |
-|---|---|---|
-| Voucher giảm 20,000đ | 220 điểm | ~9% |
-| Voucher giảm 50,000đ | 530 điểm | ~9.4% |
-| Voucher giảm 100,000đ | 1,000 điểm | ~10% |
+### 1. Phân loại Giảm Giá
+Hệ thống hỗ trợ 2 loại Voucher chính:
+- **Trừ Tiền Mặt (Flat Discount):** Giảm trực tiếp 1 số tiền cố định (Ví dụ: -50,000đ).
+- **Giảm Phần Trăm (% Discount):** Giảm theo phần trăm hóa đơn kèm theo mức **Giảm Tối Đa (Max Discount Amount)**. (Ví dụ: Giảm 20%, tối đa 100k).
 
-### Nhóm 2: Free Wash (Rửa xe miễn phí)
+### 2. Các Lớp Kiểm Duyệt (Validation Constraints)
+Một Voucher chỉ được áp dụng nếu vượt qua 6 điều kiện sau:
+1. **Kiểm tra Hạn Sử Dụng (`ValidDays` / `ExpiresAt`):** Mã còn trong thời gian hiệu lực.
+2. **Kiểm tra Hạng Thẻ (`MinTierRequired`):** Khách hàng phải đạt hạng thẻ tối thiểu (VD: Mã dành riêng cho hạng Vàng, hạng Bạc không được dùng).
+3. **Giá trị đơn tối thiểu (`MinOrderValue`):** Tổng tiền dịch vụ khách đặt phải lớn hơn hoặc bằng mức yêu cầu của mã.
+4. **Giới hạn Tổng Lượt Dùng (`TotalQuantity`):** (Ví dụ: Mã xả hàng "FLASH50" chỉ giới hạn cho 50 người dùng đầu tiên trên toàn hệ thống).
+5. **Khung Giờ Vắng Khách (Happy Hour):** 
+   - Mã có thể được khóa theo Ngày trong tuần (`ValidDaysOfWeek` - VD: Chỉ áp dụng Thứ 3, Thứ 4).
+   - Mã có thể được khóa theo Khung giờ (`ValidTimeRanges` - VD: Chỉ áp dụng từ 09:00 - 14:00).
+6. **Giới hạn Dịch Vụ Cụ Thể (Service-Specific):** Mã có thể chỉ định riêng cho 1 gói dịch vụ nhất định (VD: "Chỉ giảm giá 50% cho dịch vụ Phủ Ceramic"). Khách book rửa xe thường sẽ không áp dụng được mã này.
 
-| Quà | Điểm cần | Tương đương |
-|---|---|---|
-| 1 suất Gói Full Basic (xe Small) | 1,800 điểm | ~150,000đ |
-| 1 suất Gói Full Basic (xe Medium) | 1,900 điểm | ~160,000đ |
-| 1 suất Gói Full Basic (xe Large) | 2,000 điểm | ~170,000đ |
-
-### Nhóm 3: Add-on Services (Dịch vụ cộng thêm miễn phí)
-
-| Quà | Điểm cần | Tương đương |
-|---|---|---|
-| Tẩy ố kính lái | 2,200 điểm | ~200,000đ |
-| Khử mùi Ozone nội thất | 1,600 điểm | ~150,000đ |
-| Xịt dưỡng lốp | 600 điểm | ~50,000đ |
-| Châm nước rửa kính | 250 điểm | ~20,000đ |
-
-> **Tỷ lệ hoàn vốn điểm ≈ 9–10%** — mức chuẩn ngành, đủ hấp dẫn nhưng không tạo lỗ cho hệ thống.
+> **Tỷ lệ hoàn vốn điểm ≈ 9–10%** — mức chuẩn ngành, đủ hấp dẫn nhưng không tạo lỗ cho hệ thống nhờ vào 6 lớp bảo vệ trên.
 
 ---
 
